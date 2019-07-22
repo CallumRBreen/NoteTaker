@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteTaker.API", "src\NoteTa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteTaker.API.Tests", "test\NoteTaker.API.Tests\NoteTaker.API.Tests.csproj", "{EBC0C65F-6D6E-414D-9F41-B0780AF8BA03}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteTaker.Core", "src\NoteTaker.Core\NoteTaker.Core.csproj", "{76AE2CC3-8546-4A10-8D69-A6145849E620}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{EBC0C65F-6D6E-414D-9F41-B0780AF8BA03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBC0C65F-6D6E-414D-9F41-B0780AF8BA03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBC0C65F-6D6E-414D-9F41-B0780AF8BA03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76AE2CC3-8546-4A10-8D69-A6145849E620}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76AE2CC3-8546-4A10-8D69-A6145849E620}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76AE2CC3-8546-4A10-8D69-A6145849E620}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76AE2CC3-8546-4A10-8D69-A6145849E620}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{DA6293F7-00B5-4783-B483-8A603411A3AA} = {AE4F3E95-31D4-4495-841E-0D9AFD863ED9}
 		{EBC0C65F-6D6E-414D-9F41-B0780AF8BA03} = {06561351-A0CE-411B-888E-28F1B7871AAC}
+		{76AE2CC3-8546-4A10-8D69-A6145849E620} = {AE4F3E95-31D4-4495-841E-0D9AFD863ED9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03F1E1EA-B3CA-4E78-8934-2ADA43DE42FE}
