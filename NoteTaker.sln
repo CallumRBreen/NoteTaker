@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteTaker.API", "src\NoteTa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteTaker.API.Tests", "test\NoteTaker.API.Tests\NoteTaker.API.Tests.csproj", "{EBC0C65F-6D6E-414D-9F41-B0780AF8BA03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteTaker.Core", "src\NoteTaker.Core\NoteTaker.Core.csproj", "{76AE2CC3-8546-4A10-8D69-A6145849E620}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteTaker.Core", "src\NoteTaker.Core\NoteTaker.Core.csproj", "{76AE2CC3-8546-4A10-8D69-A6145849E620}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

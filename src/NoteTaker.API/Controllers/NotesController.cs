@@ -24,7 +24,7 @@ namespace NoteTaker.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Note> Update(UpdateNote note)
+        public ActionResult<Note> Update(string id, UpdateNote note)
         {
             return Ok(FakeDataHelper.GetNotes().FirstOrDefault());
         }
