@@ -1,0 +1,19 @@
+<div fxLayout="row" fxFill>
+  <div class="sec1" fxFlex="30%">
+    <ul>
+      <li *ngFor="let note of notes" [class.selected]="note === selectedNote" (click)="onSelect(note)">
+        <p>
+          {{ note.id }}
+
+        </p>
+        <p>
+          {{ note.title }}
+        </p>
+
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="selectedNote" class="sec2" fxFlex="70%">
+    <app-note [note]="selectedNote"></app-note>
+  </div>
+</div>

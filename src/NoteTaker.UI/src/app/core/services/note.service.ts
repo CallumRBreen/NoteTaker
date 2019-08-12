@@ -1,4 +1,4 @@
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -13,7 +13,7 @@ export class NoteService {
   constructor(private http: HttpClient) { }
 
   getNotes(): Observable<Note[]> {
-    return this.http.get<Note[]>(this.url) ; 
+    return this.http.get<Note[]>(this.url);
   }
 
   getNote(id: string): Observable<Note> {

@@ -1,25 +1,25 @@
-import { DashboardModule } from './dashboard/dashboard.module';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavigationComponent } from './navigation/navigation.component';
 import { HttpClientModule } from '@angular/common/http';
-import { NoteService } from './core/services/note.service';
-import { MaterialModule } from './material/material.module';
+import { MaterialModule } from './material.module';
+import { NotesModule } from './notes/notes.module';
 
 @NgModule({
    declarations: [
       AppComponent,
-      NavigationComponent,
    ],
    imports: [
       BrowserModule,
       AppRoutingModule,
       HttpClientModule,
-      DashboardModule,
-      MaterialModule
+      MaterialModule,
+      FlexLayoutModule,
+      NotesModule
    ],
    providers: [],
    bootstrap: [
