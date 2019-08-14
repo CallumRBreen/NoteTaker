@@ -1,19 +1,21 @@
 <div fxLayout="row" fxFill>
-  <div class="sec1" fxFlex="30%">
-    <ul>
-      <li *ngFor="let note of notes" [class.selected]="note === selectedNote" (click)="onSelect(note)">
-        <p>
-          {{ note.id }}
-
-        </p>
-        <p>
-          {{ note.title }}
-        </p>
-
-      </li>
-    </ul>
+  <div fxFlex="30%">
+    <div class="note-actions">
+      {{notes.length}} notes | order by |<mat-icon>add</mat-icon>
+    </div>
+    <mat-list>
+      <cdk-virtual-scroll-viewport itemSize="100">
+        <mat-list-item *cdkVirtualFor="let note of notes;" [class.selected]="note === selectedNote"
+          (click)="onSelect(note)" style="height: 100px; cursor: pointer">
+          <h3 matLine>{{note.title | limitTo : 20}}</h3>
+          <p matLine>{{note.content | limitTo : 30}}</p>
+          <mat-icon>star_border</mat-icon>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+      </cdk-virtual-scroll-viewport>
+    </mat-list>
   </div>
-  <div *ngIf="selectedNote" class="sec2" fxFlex="70%">
+  <div *ngIf="selectedNote" fxFlex="70%">
     <app-note [note]="selectedNote"></app-note>
   </div>
 </div>

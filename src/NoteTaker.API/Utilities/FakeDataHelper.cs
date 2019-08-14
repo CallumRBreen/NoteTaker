@@ -13,7 +13,7 @@ namespace NoteTaker.API.Utilities
         {
             var faker = new Faker();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < count; i++)
             {
                 yield return new Note()
                 {

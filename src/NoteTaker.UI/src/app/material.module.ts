@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDividerModule } from '@angular/material/divider';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 
 import {
@@ -22,7 +23,7 @@ import {
   MatDialogModule,
   MatTableModule,
   MatSortModule,
-  MatPaginatorModule,
+  MatPaginatorModule
 } from '@angular/material';
 
 @NgModule({
@@ -47,7 +48,8 @@ import {
     MatPaginatorModule,
     MatMenuModule,
     BrowserAnimationsModule,
-    MatDividerModule
+    MatDividerModule,
+    ScrollingModule
   ],
   exports: [
     MatButtonModule,
@@ -70,7 +72,8 @@ import {
     MatPaginatorModule,
     MatMenuModule,
     BrowserAnimationsModule,
-    MatDividerModule
+    MatDividerModule,
+    ScrollingModule
   ]
 })
 export class MaterialModule { }

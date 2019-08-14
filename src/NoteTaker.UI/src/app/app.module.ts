@@ -1,3 +1,4 @@
+import { LimitToPipe } from './core/pipes/limitTo.pipe';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -11,7 +12,7 @@ import { NotesModule } from './notes/notes.module';
 
 @NgModule({
    declarations: [
-      AppComponent,
+      AppComponent
    ],
    imports: [
       BrowserModule,

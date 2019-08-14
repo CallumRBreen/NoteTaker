@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using NoteTaker.API.Utilities;
 using NoteTaker.API.ViewModels;
 
@@ -11,10 +12,18 @@ namespace NoteTaker.API.Controllers
     [ApiController]
     public class NotesController : ControllerBase
     {
+        private readonly ILogger<NotesController> logger;
+
+        public NotesController(ILogger<NotesController> logger)
+        {
+            this.logger = logger;
+        }
+
         [HttpGet]
         public ActionResult<List<Note>> Get()
         {
-            return Ok(FakeDataHelper.GetNotes());
+            logger.LogDebug("Getting all notes");
+            return Ok(FakeDataHelper.GetNotes(1000));
         }
 
         [HttpGet("{id}")]
