@@ -10,6 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './material.module';
 import { NotesModule } from './notes/notes.module';
 
+import { QuillModule } from 'ngx-quill';
+
 @NgModule({
    declarations: [
       AppComponent
@@ -20,7 +22,8 @@ import { NotesModule } from './notes/notes.module';
       HttpClientModule,
       MaterialModule,
       FlexLayoutModule,
-      NotesModule
+      NotesModule,
+      QuillModule
    ],
    providers: [],
    bootstrap: [

@@ -23,7 +23,7 @@ namespace NoteTaker.API.Controllers
         public ActionResult<List<Note>> Get()
         {
             logger.LogDebug("Getting all notes");
-            return Ok(FakeDataHelper.GetNotes(1000));
+            return Ok(FakeDataHelper.GetNotes(20));
         }
 
         [HttpGet("{id}")]

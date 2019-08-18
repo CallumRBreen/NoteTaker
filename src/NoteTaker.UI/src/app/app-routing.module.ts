@@ -5,15 +5,15 @@ import { NoteComponent } from './notes/note/note.component';
 
 const routes: Routes = [
   {
-    path: '', component: NotesComponent
+    path: '', redirectTo: 'notes', pathMatch: 'full'
   },
   {
-    path: 'notes', component: NotesComponent, children: [{ path: 'notes/:id', component: NoteComponent }]
+    path: 'notes', component: NotesComponent
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { enableTracing: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

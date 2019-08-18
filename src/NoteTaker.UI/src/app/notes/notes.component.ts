@@ -8,7 +8,7 @@ import { map, tap, scan, mergeMap, throttleTime } from 'rxjs/operators';
 @Component({
   selector: 'app-notes',
   templateUrl: './notes.component.html',
-  styleUrls: ['./notes.component.css']
+  styleUrls: ['./notes.component.styl']
 })
 export class NotesComponent implements OnInit {
 
@@ -25,7 +25,6 @@ export class NotesComponent implements OnInit {
   }
 
   onSelect(note: Note) {
-    this.notes.length
     this.selectedNote = note;
   }
 

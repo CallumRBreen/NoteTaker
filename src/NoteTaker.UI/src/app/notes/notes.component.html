@@ -1,21 +1,37 @@
 <div fxLayout="row" fxFill>
-  <div fxFlex="30%">
+  <div fxFlex="25%">
     <div class="note-actions">
-      {{notes.length}} notes | order by |<mat-icon>add</mat-icon>
+
+      <span>
+        {{notes.length}} notes
+      </span>
+
+      <span>
+        <button mat-icon-button>
+          <mat-icon>add</mat-icon>
+        </button>
+      </span>
+
+      <mat-divider></mat-divider>
     </div>
-    <mat-list>
-      <cdk-virtual-scroll-viewport itemSize="100">
+    <cdk-virtual-scroll-viewport itemSize="100">
+      <mat-list>
         <mat-list-item *cdkVirtualFor="let note of notes;" [class.selected]="note === selectedNote"
           (click)="onSelect(note)" style="height: 100px; cursor: pointer">
-          <h3 matLine>{{note.title | limitTo : 20}}</h3>
-          <p matLine>{{note.content | limitTo : 30}}</p>
+          <h3 matLine>
+            <div [innerHTML]="note.title | limitTo : 30"></div>
+          </h3>
+          <h4 matLine>
+            <div [innerHTML]="note.content | limitTo : 40"></div>
+          </h4>
           <mat-icon>star_border</mat-icon>
           <mat-divider></mat-divider>
         </mat-list-item>
-      </cdk-virtual-scroll-viewport>
-    </mat-list>
+      </mat-list>
+    </cdk-virtual-scroll-viewport>
+
   </div>
-  <div *ngIf="selectedNote" fxFlex="70%">
+  <div *ngIf="selectedNote" fxFlex="75%">
     <app-note [note]="selectedNote"></app-note>
   </div>
 </div>
