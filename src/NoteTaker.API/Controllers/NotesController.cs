@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NoteTaker.API.Utilities;
@@ -41,7 +42,26 @@ namespace NoteTaker.API.Controllers
         [HttpPost]
         public ActionResult<Note> Create(CreateNote note)
         {
+            logger.LogDebug($"Created note");
+
             return Created($"api/notes/{Guid.NewGuid().ToString()}",FakeDataHelper.GetNotes().FirstOrDefault());
+        }
+
+        [HttpPatch]
+        public ActionResult<Note> Patch(JsonPatchDocument<Note> note)
+        {
+            if (note == null)
+            {
+                return BadRequest();
+            }
+
+            var patchedNote = new Note();
+
+            note.ApplyTo(patchedNote);
+
+            logger.LogDebug($"Patched note {patchedNote.Id}");
+
+            return Ok(patchedNote);
         }
     }
 }

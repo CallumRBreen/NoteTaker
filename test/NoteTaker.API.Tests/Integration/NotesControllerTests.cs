@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using NoteTaker.API.ViewModels;
@@ -62,8 +67,50 @@ namespace NoteTaker.API.Tests.Integration
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
 
-        private UpdateNote GetUpdateNoteTestData() => new UpdateNote {Title = "New Note", Content = "New Note Content"};
+        [Fact]
+        public async Task Patch_Note_Successfully()
+        {
+            var client = factory.CreateClient();
 
-        private CreateNote GetCreateNoteTestData() => new CreateNote { Title = "New Note", Content = "New Note Content" };
+            var operations = GetPatchNoteOperations();
+
+            var httpContent = new StringContent(JsonConvert.SerializeObject(operations), Encoding.UTF8, "application/json");
+
+            var response = await client.PatchAsync($"api/notes", httpContent);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var responseModel = await response.Content.ReadAsAsync<Note>();
+
+            Assert.Equal("New Title", responseModel.Title);
+            Assert.Equal("New Content", responseModel.Content);
+        }
+
+        private static JsonPatchDocument<Note> GetPatchNoteOperations()
+        {
+            var operations = new List<Operation<Note>>()
+            {
+                new Operation<Note>()
+                {
+                    op = "replace",
+                    path = "/title",
+                    value = "New Title"
+                },
+                new Operation<Note>()
+                {
+                    op = "replace",
+                    path = "/content",
+                    value = "New Content"
+                }
+            };
+
+            var jsonPatchDocument =  new JsonPatchDocument<Note>(operations, new JsonContractResolver(new JsonMediaTypeFormatter()));
+
+            return jsonPatchDocument;
+        }
+
+        private static UpdateNote GetUpdateNoteTestData() => new UpdateNote {Title = "New Note", Content = "New Note Content"};
+
+        private static CreateNote GetCreateNoteTestData() => new CreateNote { Title = "New Note", Content = "New Note Content" };
     }
 }

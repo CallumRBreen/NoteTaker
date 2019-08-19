@@ -1,6 +1,6 @@
 import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Note } from '../models/note';
 
@@ -18,5 +18,19 @@ export class NoteService {
 
   getNote(id: string): Observable<Note> {
     return this.http.get<Note>(`${this.url}${id}`);
+  }
+
+  addNote(note: Note): Observable<Note> {
+    return this.http.post<Note>(this.url, note);
+  }
+
+  updateTitle(title: string): Observable<Note> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
+    return this.http.patch<Note>(this.url, `[{ "op": "replace", "path": "/title", "value": "${title}" }]`, { headers });
+  }
+
+  updateContent(content: string): Observable<Note> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
+    return this.http.patch<Note>(this.url, `[{ "op": "replace", "path": "/content", "value": "${content}" }]`, { headers });
   }
 }

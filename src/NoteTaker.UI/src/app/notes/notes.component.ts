@@ -14,14 +14,16 @@ export class NotesComponent implements OnInit {
 
   selectedNote: Note;
   notes: Note[] = [];
-  notesSubscription: Subscription;
 
   constructor(private noteService: NoteService) {
 
   }
 
   ngOnInit() {
-    this.notesSubscription = this.noteService.getNotes().subscribe(notes => this.notes = notes);
+    this.noteService.getNotes().subscribe(notes => {
+      this.notes = notes;
+      this.selectedNote = notes[0];
+    });
   }
 
   onSelect(note: Note) {
@@ -29,6 +31,6 @@ export class NotesComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.notesSubscription.unsubscribe();
+
   }
 }

@@ -1,23 +1,21 @@
 <div fxLayout="row" fxFill>
   <div fxFlex="25%">
-    <div class="note-actions">
+    <div fxLayout="row" fxLayoutAlign="space-evenly center">
 
-      <span>
+      <div fxFlex="90%" style="text-align: center">
         {{notes.length}} notes
-      </span>
-
-      <span>
+      </div>
+      <div fxFlex="10%">
         <button mat-icon-button>
           <mat-icon>add</mat-icon>
         </button>
-      </span>
-
-      <mat-divider></mat-divider>
+      </div>
     </div>
+    <mat-divider></mat-divider>
     <cdk-virtual-scroll-viewport itemSize="100">
       <mat-list>
         <mat-list-item *cdkVirtualFor="let note of notes;" [class.selected]="note === selectedNote"
-          (click)="onSelect(note)" style="height: 100px; cursor: pointer">
+          (click)="onSelect(note)">
           <h3 matLine>
             <div [innerHTML]="note.title | limitTo : 30"></div>
           </h3>
