@@ -5,7 +5,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Note } from '../../core/models/note';
 import * as BalloonEditor from '@ckeditor/ckeditor5-build-balloon';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
-import { map, filter, scan, debounceTime, debounce } from 'rxjs/operators';
+import { map, filter, scan, debounceTime, debounce, groupBy, mergeMap, flatMap, tap, mergeAll } from 'rxjs/operators';
 
 @Component({
   selector: 'app-note',
@@ -30,19 +30,19 @@ export class NoteComponent implements OnInit {
   constructor(private notesService: NoteService) {
     this.hasInitialTitleChangedEventTriggered = false;
     this.hasInitialContentChangedEventTriggered = false;
-    this.hasTitleChanged = new BehaviorSubject<DataChanged>({ changed: false, data: null });
-    this.hasContentChanged = new BehaviorSubject<DataChanged>({ changed: false, data: null });
+    this.hasTitleChanged = new BehaviorSubject<DataChanged>({ id: null, changed: false, data: null });
+    this.hasContentChanged = new BehaviorSubject<DataChanged>({ id: null, changed: false, data: null });
 
-    this.titleChangeSubscription = this.hasTitleChanged.pipe(filter(x => x.changed === true), debounceTime(2000)).subscribe(x => {
+    this.titleChangeSubscription = this.hasTitleChanged.pipe(filter(x => x.changed === true), groupBy(x => x.id), map(group => group.pipe(debounceTime(2000))), mergeAll()).subscribe(x => {
       console.log(x);
-      this.notesService.updateTitle(x.data).subscribe(x => { console.log("Note title updated") });
-      this.hasTitleChanged.next({ changed: false, data: null });
+      this.notesService.updateTitle(x.id, x.data).subscribe(x => { console.log("Note title updated") });
+      this.hasTitleChanged.next({ id: this.note.id, changed: false, data: null });
     })
 
-    this.contentChangeSubscription = this.hasContentChanged.pipe(filter(x => x.changed === true), debounceTime(2000)).subscribe(x => {
+    this.contentChangeSubscription = this.hasContentChanged.pipe(filter(x => x.changed === true), groupBy(x => x.id), map(group => group.pipe(debounceTime(2000))), mergeAll()).subscribe(x => {
       console.log(x);
-      this.notesService.updateContent(x.data).subscribe(x => { console.log("Note content updated") });
-      this.hasContentChanged.next({ changed: false, data: null });
+      this.notesService.updateContent(x.id, x.data).subscribe(x => { console.log("Note content updated") });
+      this.hasContentChanged.next({ id: this.note.id, changed: false, data: null });
     })
   }
 
@@ -64,7 +64,7 @@ export class NoteComponent implements OnInit {
       this.hasInitialTitleChangedEventTriggered = true;
       return;
     }
-    this.hasTitleChanged.next({ changed: true, data: editor.getData() });
+    this.hasTitleChanged.next({ id: this.note.id, changed: true, data: editor.getData() });
   }
 
   public contentOnChange({ editor }: ChangeEvent) {
@@ -72,6 +72,6 @@ export class NoteComponent implements OnInit {
       this.hasInitialContentChangedEventTriggered = true;
       return;
     }
-    this.hasContentChanged.next({ changed: true, data: editor.getData() });
+    this.hasContentChanged.next({ id: this.note.id, changed: true, data: editor.getData() });
   }
 }

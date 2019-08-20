@@ -47,13 +47,10 @@ namespace NoteTaker.API.Controllers
             return Created($"api/notes/{Guid.NewGuid().ToString()}",FakeDataHelper.GetNotes().FirstOrDefault());
         }
 
-        [HttpPatch]
-        public ActionResult<Note> Patch(JsonPatchDocument<Note> note)
+        [HttpPatch("{id}")]
+        public ActionResult<Note> Patch(string id, JsonPatchDocument<Note> note)
         {
-            if (note == null)
-            {
-                return BadRequest();
-            }
+            if (note == null) return BadRequest();
 
             var patchedNote = new Note();
 

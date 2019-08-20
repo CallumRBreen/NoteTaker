@@ -24,13 +24,13 @@ export class NoteService {
     return this.http.post<Note>(this.url, note);
   }
 
-  updateTitle(title: string): Observable<Note> {
+  updateTitle(id: string, title: string): Observable<Note> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
-    return this.http.patch<Note>(this.url, `[{ "op": "replace", "path": "/title", "value": "${title}" }]`, { headers });
+    return this.http.patch<Note>(`${this.url}${id}`, `[{ "op": "replace", "path": "/title", "value": "${title}" }]`, { headers });
   }
 
-  updateContent(content: string): Observable<Note> {
+  updateContent(id: string, content: string): Observable<Note> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
-    return this.http.patch<Note>(this.url, `[{ "op": "replace", "path": "/content", "value": "${content}" }]`, { headers });
+    return this.http.patch<Note>(`${this.url}${id}`, `[{ "op": "replace", "path": "/content", "value": "${content}" }]`, { headers });
   }
 }
