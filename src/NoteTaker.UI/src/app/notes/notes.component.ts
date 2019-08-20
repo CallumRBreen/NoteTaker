@@ -33,4 +33,11 @@ export class NotesComponent implements OnInit {
   ngOnDestroy(): void {
 
   }
+
+  addNote() {
+    this.noteService.addNote({ title: "new note", content: "new content" }).subscribe(createdNote => {
+      this.notes.unshift(createdNote);
+      this.notes = [...this.notes]
+    });
+  }
 }
