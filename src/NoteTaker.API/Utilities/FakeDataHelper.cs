@@ -20,7 +20,7 @@ namespace NoteTaker.API.Utilities
                     Id = Guid.NewGuid().ToString(),
                     Title = faker.Lorem.Lines(1),
                     Content = faker.Lorem.Paragraphs(2),
-                    Created = DateTime.Now,
+                    Created = DateTime.Now.AddDays(-7),
                     Modified = DateTime.Now
                 };
             }

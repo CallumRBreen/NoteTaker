@@ -1,7 +1,9 @@
 <div class="container-editor">
-    <ckeditor [editor]="TitleEditor" [(ngModel)]="note.title" (change)="titleOnChange($event)"></ckeditor>
+    <ckeditor [editor]="TitleEditor" [config]="titleConfig" [(ngModel)]="note.title" (change)="titleOnChange($event)">
+    </ckeditor>
 
     <mat-divider></mat-divider>
 
-    <ckeditor [editor]="ContentEditor" [(ngModel)]="note.content" (change)="contentOnChange($event)"></ckeditor>
+    <ckeditor [editor]="ContentEditor" [config]="contentConfig" [(ngModel)]="note.content"
+        (change)="contentOnChange($event)"></ckeditor>
 </div>

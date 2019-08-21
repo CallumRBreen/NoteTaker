@@ -35,9 +35,10 @@ export class NotesComponent implements OnInit {
   }
 
   addNote() {
-    this.noteService.addNote({ title: "new note", content: "new content" }).subscribe(createdNote => {
+    this.noteService.addNote({ title: '', content: '' }).subscribe(createdNote => {
       this.notes.unshift(createdNote);
       this.notes = [...this.notes]
+      this.selectedNote = this.notes[0];
     });
   }
 }

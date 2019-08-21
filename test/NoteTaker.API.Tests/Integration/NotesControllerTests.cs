@@ -76,7 +76,7 @@ namespace NoteTaker.API.Tests.Integration
 
             var httpContent = new StringContent(JsonConvert.SerializeObject(operations), Encoding.UTF8, "application/json");
 
-            var response = await client.PatchAsync($"api/notes", httpContent);
+            var response = await client.PatchAsync($"api/notes/{Guid.NewGuid().ToString()}", httpContent);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 

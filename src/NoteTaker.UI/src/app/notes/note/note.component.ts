@@ -5,7 +5,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Note } from '../../core/models/note';
 import * as BalloonEditor from '@ckeditor/ckeditor5-build-balloon';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
-import { map, filter, scan, debounceTime, debounce, groupBy, mergeMap, flatMap, tap, mergeAll } from 'rxjs/operators';
+import { map, filter, debounceTime, groupBy, mergeAll } from 'rxjs/operators';
 
 @Component({
   selector: 'app-note',
@@ -15,6 +15,13 @@ import { map, filter, scan, debounceTime, debounce, groupBy, mergeMap, flatMap, 
 export class NoteComponent implements OnInit {
   public TitleEditor: BalloonEditor = BalloonEditor;
   public ContentEditor: BalloonEditor = BalloonEditor;
+  public titleConfig = {
+    placeholder: "Title"
+  }
+
+  public contentConfig = {
+    placeholder: "Content"
+  }
 
   hasTitleChanged: BehaviorSubject<DataChanged>;
   hasContentChanged: BehaviorSubject<DataChanged>;
@@ -32,6 +39,7 @@ export class NoteComponent implements OnInit {
     this.hasInitialContentChangedEventTriggered = false;
     this.hasTitleChanged = new BehaviorSubject<DataChanged>({ id: null, changed: false, data: null });
     this.hasContentChanged = new BehaviorSubject<DataChanged>({ id: null, changed: false, data: null });
+
 
     this.titleChangeSubscription = this.hasTitleChanged.pipe(filter(x => x.changed === true), groupBy(x => x.id), map(group => group.pipe(debounceTime(2000))), mergeAll()).subscribe(x => {
       console.log(x);

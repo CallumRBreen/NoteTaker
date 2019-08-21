@@ -44,7 +44,14 @@ namespace NoteTaker.API.Controllers
         {
             logger.LogDebug($"Created note");
 
-            return Created($"api/notes/{Guid.NewGuid().ToString()}",FakeDataHelper.GetNotes().FirstOrDefault());
+            return Created($"api/notes/{Guid.NewGuid().ToString()}", new Note
+            {
+                Title = note.Title,
+                Content = note.Content,
+                Created = DateTime.UtcNow,
+                Id = Guid.NewGuid().ToString(),
+                Modified = DateTime.UtcNow
+            });
         }
 
         [HttpPatch("{id}")]
