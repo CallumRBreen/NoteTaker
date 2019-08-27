@@ -12,14 +12,14 @@ steps:
       projects: "**/*Tests/*.csproj"
       arguments: "--configuration Release"
   - task: Npm@1
-    displayName: NPM install Packages
+    displayName: Frontend - Install Packages
     inputs:
       command: custom
       workingDir: "src/NoteTaker.UI"
       verbose: false
       customCommand: "install --save"
   - task: Npm@1
-    displayName: NPM build
+    displayName: Frontend - Build
     inputs:
       command: custom
       workingDir: "src/NoteTaker.UI"
