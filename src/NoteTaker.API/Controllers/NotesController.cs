@@ -21,8 +21,32 @@ namespace NoteTaker.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Note>> Get()
+        public ActionResult<List<Note>> Get([FromQuery] QueryNote query)
         {
+            if (!string.IsNullOrWhiteSpace(query?.Text))
+            {
+                logger.LogDebug("Searching all notes");
+
+                var notes = new List<Note>
+                {
+                    new Note
+                    {
+                        Title = "Title #1",
+                        Content = query.Text,
+                        Id = Guid.NewGuid().ToString(),
+                        Created = DateTime.UtcNow,
+                        Modified = DateTime.UtcNow
+                    }
+                };
+
+
+                notes.AddRange(FakeDataHelper.GetNotes(200)
+                                                    .Where(x => x.Title.Contains(query.Text)
+                                                             || x.Content.Contains(query.Text)).ToList());;
+
+                return Ok(notes);
+            }
+
             logger.LogDebug("Getting all notes");
             return Ok(FakeDataHelper.GetNotes(200));
         }

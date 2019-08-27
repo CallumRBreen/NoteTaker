@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
@@ -31,6 +32,20 @@ namespace NoteTaker.API.Tests.Integration
             var response = await client.GetAsync("api/notes");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Search_All_Notes_Successfully()
+        {
+            var client = factory.CreateClient();
+
+            var response = await client.GetAsync("api/notes?text=Apples");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var responseModel = await response.Content.ReadAsAsync<List<Note>>();
+
+            Assert.Equal("Apples", responseModel.First().Content);
         }
 
         [Fact]

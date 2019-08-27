@@ -16,6 +16,10 @@ export class NoteService {
     return this.http.get<Note[]>(this.url);
   }
 
+  searchNotes(text: string): Observable<Note[]> {
+    return this.http.get<Note[]>(`${this.url}?text=${text}`);
+  }
+
   getNote(id: string): Observable<Note> {
     return this.http.get<Note>(`${this.url}${id}`);
   }

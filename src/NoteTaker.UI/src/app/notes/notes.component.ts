@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NoteService } from '../core/services/note.service';
 import { Note } from '../core/models/note';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { map, tap, scan, mergeMap, throttleTime } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
+import { timer, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-notes',
@@ -14,6 +14,9 @@ export class NotesComponent implements OnInit {
 
   selectedNote: Note;
   notes: Note[] = [];
+  noteSearch: string;
+  searchNotesControl = new FormControl('');
+  searchNotesSubscription = new Subscription();
 
   constructor(private noteService: NoteService) {
 
@@ -24,6 +27,13 @@ export class NotesComponent implements OnInit {
       this.notes = notes;
       this.selectedNote = notes[0];
     });
+
+    this.searchNotesSubscription = this.searchNotesControl.valueChanges.pipe(debounceTime(1000)).subscribe(() => {
+      this.noteService.searchNotes(this.searchNotesControl.value).subscribe(notes => {
+        this.notes = notes;
+        this.selectedNote = notes[0];
+      })
+    });
   }
 
   onSelect(note: Note) {
@@ -31,7 +41,7 @@ export class NotesComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-
+    this.searchNotesSubscription.unsubscribe();
   }
 
   addNote() {
