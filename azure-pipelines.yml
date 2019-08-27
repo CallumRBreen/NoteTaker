@@ -11,15 +11,20 @@ steps:
       command: test
       projects: "**/*Tests/*.csproj"
       arguments: "--configuration Release"
-  - task: NodeTool@0
+  - task: Npm@1
+    displayName: NPM install Packages
     inputs:
-      versionSpec: "10.x"
-    displayName: "Install Node.js"
-  - script: |
-      npm install -g @angular/cli
-      npm install
-      ng build --prod
-    displayName: "npm install and build"
+      command: custom
+      workingDir: "src/NoteTaker.UI"
+      verbose: false
+      customCommand: "install --save"
+  - task: Npm@1
+    displayName: NPM build
+    inputs:
+      command: custom
+      workingDir: "src/NoteTaker.UI"
+      verbose: false
+      customCommand: "run build:prod"
 trigger:
   - master
 pool:
