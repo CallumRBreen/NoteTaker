@@ -1,38 +1,27 @@
 steps:
-
-- task: DotNetCoreCLI@2
-  displayName: 'Backend - Build'
-  inputs:
-    command: build
-    projects: '**/*.csproj'
-    arguments: '--configuration Release'
-- task: DotNetCoreCLI@2
-  displayName: 'Backend - Tests'
-  inputs:
-    command: test
-    projects: '**/*Tests/*.csproj'
-    arguments: '--configuration Release'
-- task: NodeTool@0 
-  inputs:
-    versionSpec: '8.x' # replace this value with the version that you need for your project
-- task: Npm@1
-  displayName: NPM install Packages
-  inputs:
-    command: custom
-    workingDir: 'src/NoteTaker.UI'
-    verbose: false
-    customCommand: 'npm install'
-- task: Npm@1
-  displayName: NPM build
-  inputs:
-    command: custom
-    workingDir: 'src/NoteTaker.UI'
-    verbose: false
-    customCommand: 'npm run build'
-
+  - task: DotNetCoreCLI@2
+    displayName: "Backend - Build"
+    inputs:
+      command: build
+      projects: "**/*.csproj"
+      arguments: "--configuration Release"
+  - task: DotNetCoreCLI@2
+    displayName: "Backend - Tests"
+    inputs:
+      command: test
+      projects: "**/*Tests/*.csproj"
+      arguments: "--configuration Release"
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "10.x"
+      workingDir: "src/NoteTaker.UI"
+    displayName: "Install Node.js"
+  - script: npm install
+      npm run build
+    displayName: "npm install and build"
+    inputs:
+      workingDir: "src/NoteTaker.UI"
 trigger:
-- master
-
+  - master
 pool:
-  vmImage: 'ubuntu-latest'
-
+  vmImage: "ubuntu-latest"
