@@ -24,7 +24,7 @@ steps:
       command: custom
       workingDir: "src/NoteTaker.UI"
       verbose: false
-      customCommand: "run build:prod"
+      customCommand: "run build"
 trigger:
   - master
 pool:
