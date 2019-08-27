@@ -14,13 +14,12 @@ steps:
   - task: NodeTool@0
     inputs:
       versionSpec: "10.x"
-      workingDir: "src/NoteTaker.UI"
     displayName: "Install Node.js"
-  - script: npm install
-      npm run build
+  - script: |
+      npm install -g @angular/cli
+      npm install
+      ng build --prod
     displayName: "npm install and build"
-    inputs:
-      workingDir: "src/NoteTaker.UI"
 trigger:
   - master
 pool:
