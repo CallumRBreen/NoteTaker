@@ -1,20 +1,31 @@
 steps:
-- task: DotNetCoreCLI@2
-  displayName: Build
-  inputs:
-    command: build
-    projects: '**/*.csproj'
-    arguments: '--configuration Release'
-- task: DotNetCoreCLI@2
-  displayName: Tests
-  inputs:
-    command: test
-    projects: '**/*Tests/*.csproj'
-    arguments: '--configuration Release'
-
+  - task: DotNetCoreCLI@2
+    displayName: "Backend - Build"
+    inputs:
+      command: build
+      projects: "**/*.csproj"
+      arguments: "--configuration Release"
+  - task: DotNetCoreCLI@2
+    displayName: "Backend - Tests"
+    inputs:
+      command: test
+      projects: "**/*Tests/*.csproj"
+      arguments: "--configuration Release"
+  - task: Npm@1
+    displayName: Frontend - Install Packages
+    inputs:
+      command: custom
+      workingDir: "src/NoteTaker.UI"
+      verbose: false
+      customCommand: "install --save"
+  - task: Npm@1
+    displayName: Frontend - Build
+    inputs:
+      command: custom
+      workingDir: "src/NoteTaker.UI"
+      verbose: false
+      customCommand: "run build"
 trigger:
-- master
-
+  - master
 pool:
-  vmImage: 'ubuntu-latest'
-
+  vmImage: "ubuntu-latest"
