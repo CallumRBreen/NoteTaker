@@ -10,16 +10,17 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
+using NoteTaker.API.Tests.TestHelpers;
 using NoteTaker.API.ViewModels;
 using Xunit;
 
 namespace NoteTaker.API.Tests.Integration
 {
-    public class NotesControllerTests : IClassFixture<WebApplicationFactory<Startup>>
+    public class NotesControllerTests : IClassFixture<TestWebApplicationFactory<Startup>>
     {
-        private readonly WebApplicationFactory<Startup> factory;
+        private readonly TestWebApplicationFactory<Startup> factory;
 
-        public NotesControllerTests(WebApplicationFactory<Startup> factory)
+        public NotesControllerTests(TestWebApplicationFactory<Startup> factory)
         {
             this.factory = factory;
         }

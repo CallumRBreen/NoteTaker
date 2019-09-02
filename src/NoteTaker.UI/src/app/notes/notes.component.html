@@ -16,10 +16,10 @@
         <mat-list-item *cdkVirtualFor="let note of notes;" [class.selected]="note === selectedNote"
           (click)="onSelect(note)">
           <div *ngIf="note.title" matLine>
-            {{ note.title | htmlToPlaintext | limitTo: 30 }}
+            <b>{{ note.title | htmlToPlaintext | limitTo: 30 }}</b>
           </div>
           <div *ngIf="!note.title" matLine>
-            Untitled
+            <b>Untitled</b>
           </div>
           <div matLine>
             {{ note.content | htmlToPlaintext | limitTo: 60 }}

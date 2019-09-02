@@ -28,7 +28,7 @@ export class NotesComponent implements OnInit {
       this.selectedNote = notes[0];
     });
 
-    this.searchNotesSubscription = this.searchNotesControl.valueChanges.pipe(debounceTime(1000)).subscribe(() => {
+    this.searchNotesSubscription = this.searchNotesControl.valueChanges.pipe(debounceTime(500)).subscribe(() => {
       this.noteService.searchNotes(this.searchNotesControl.value).subscribe(notes => {
         this.notes = notes;
         this.selectedNote = notes[0];

@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using NoteTaker.Core.Services.Implementations;
+using NoteTaker.Core.Services.Interfaces;
+using NoteTaker.DAL;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace NoteTaker.API
@@ -27,7 +31,11 @@ namespace NoteTaker.API
                     .AllowAnyHeader();
             }));
 
+            services.AddDbContext<NoteTakerContext>(options => options.UseInMemoryDatabase(databaseName: "NoteTaker"));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddTransient<INotesService, NotesService>();
 
             services.AddSwaggerGen(c =>
             {
@@ -35,7 +43,6 @@ namespace NoteTaker.API
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -44,7 +51,6 @@ namespace NoteTaker.API
             }
             else
             {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

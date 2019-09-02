@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class HtmlToPlaintextPipe implements PipeTransform {
 
   transform(value: any, args?: any): any {
-    return value ? String(value).replace(/<[^>]+>/gm, '') : '';
+    return value ? String(value).replace(/<[^>]+>/gm, '').replace(/&nbsp;/g, '') : '';
   }
 
 }

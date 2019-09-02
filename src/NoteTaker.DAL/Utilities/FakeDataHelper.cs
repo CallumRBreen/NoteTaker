@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Bogus;
-using NoteTaker.API.ViewModels;
+using NoteTaker.DAL.Entities;
 
-namespace NoteTaker.API.Utilities
+namespace NoteTaker.DAL.Utilities
 {
     public static class FakeDataHelper
     {
@@ -16,6 +17,7 @@ namespace NoteTaker.API.Utilities
                 yield return new Note()
                 {
                     Id = Guid.NewGuid().ToString(),
+                    InternalId = i,
                     Title = faker.Lorem.Lines(1),
                     Content = faker.Lorem.Paragraphs(2),
                     Created = DateTime.Now.AddDays(-7),

@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bogus" Version="28.0.2" />
+    <PackageReference Include="Bogus" Version="28.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NoteTaker.Core\NoteTaker.Core.csproj" />
+    <ProjectReference Include="..\NoteTaker.DAL\NoteTaker.DAL.csproj" />
   </ItemGroup>
 
 </Project>

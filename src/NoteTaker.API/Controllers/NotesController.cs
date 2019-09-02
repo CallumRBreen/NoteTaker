@@ -1,54 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NoteTaker.API.Utilities;
 using NoteTaker.API.ViewModels;
+using NoteTaker.Core.Services.Interfaces;
 
-namespace NoteTaker.API.Controllers
+ namespace NoteTaker.API.Controllers
 {
     [Route("api/notes")]
     [ApiController]
     public class NotesController : ControllerBase
     {
         private readonly ILogger<NotesController> logger;
+        private readonly INotesService notesService;
 
-        public NotesController(ILogger<NotesController> logger)
+        public NotesController(ILogger<NotesController> logger, INotesService notesService)
         {
             this.logger = logger;
+            this.notesService = notesService;
         }
 
         [HttpGet]
-        public ActionResult<List<Note>> Get([FromQuery] QueryNote query)
+        public async Task<ActionResult<List<Note>>> Get([FromQuery] QueryNote query)
         {
-            if (!string.IsNullOrWhiteSpace(query?.Text))
-            {
-                logger.LogDebug("Searching all notes");
+            logger.LogDebug("Retrieving notes");
 
-                var notes = new List<Note>
-                {
-                    new Note
-                    {
-                        Title = "Title #1",
-                        Content = query.Text,
-                        Id = Guid.NewGuid().ToString(),
-                        Created = DateTime.UtcNow,
-                        Modified = DateTime.UtcNow
-                    }
-                };
+            var notes = await notesService.GetNotesAsync(query.Text);
 
-
-                notes.AddRange(FakeDataHelper.GetNotes(200)
-                                                    .Where(x => x.Title.Contains(query.Text)
-                                                             || x.Content.Contains(query.Text)).ToList());;
-
-                return Ok(notes);
-            }
-
-            logger.LogDebug("Getting all notes");
-            return Ok(FakeDataHelper.GetNotes(200));
+            return notes.Select(n => new Note(n)).ToList();
         }
 
         [HttpGet("{id}")]
