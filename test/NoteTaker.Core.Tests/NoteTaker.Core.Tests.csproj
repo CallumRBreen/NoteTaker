@@ -16,8 +16,4 @@
     <ProjectReference Include="..\..\src\NoteTaker.Core\NoteTaker.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>

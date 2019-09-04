@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NoteTaker.API.Utilities;
 using NoteTaker.API.ViewModels;
 using NoteTaker.Core.Services.Interfaces;
 
@@ -31,48 +29,76 @@ using NoteTaker.Core.Services.Interfaces;
 
             var notes = await notesService.GetNotesAsync(query.Text);
 
-            return notes.Select(n => new Note(n)).ToList();
+            return Ok(notes.Select(n => new Note(n)).ToList());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Note> Get(string id)
+        public async Task<ActionResult<Note>> Get(string id)
         {
-            return Ok(FakeDataHelper.GetNotes().FirstOrDefault());
+            logger.LogDebug($"Retrieving note: {id}");
+
+            var note = await notesService.GetNoteAsync(id);
+
+            if (note == null)
+            {
+                logger.LogDebug($"Unable to find note: {id}");
+                return NotFound();
+            }
+
+            return Ok(new Note(note));
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Note> Update(string id, UpdateNote note)
+        public async Task<ActionResult<Note>> Update(string id, [FromBody] UpdateNote note)
         {
-            return Ok(FakeDataHelper.GetNotes().FirstOrDefault());
+            logger.LogDebug($"Updating note: {id}");
+
+            var updatedNote = await notesService.UpdateNoteAsync(id, note.Title, note.Content);
+
+            if (updatedNote == null)
+            {
+                logger.LogDebug($"Unable to find note: {id}");
+                return NotFound();
+            }
+
+            logger.LogDebug($"Updated note: {id}");
+
+            return Ok(new Note(updatedNote));
         }
 
         [HttpPost]
-        public ActionResult<Note> Create(CreateNote note)
+        public async Task<ActionResult<Note>> Create([FromBody]CreateNote note)
         {
-            logger.LogDebug($"Created note");
+            logger.LogDebug($"Creating note");
 
-            return Created($"api/notes/{Guid.NewGuid().ToString()}", new Note
-            {
-                Title = note.Title,
-                Content = note.Content,
-                Created = DateTime.UtcNow,
-                Id = Guid.NewGuid().ToString(),
-                Modified = DateTime.UtcNow
-            });
+            var createdNote = await notesService.CreateNoteAsync(note.Title, note.Content);
+
+            logger.LogDebug($"Created note: {createdNote.Id}");
+
+            return Created($"api/notes/{createdNote.Id}", new Note(createdNote));
         }
 
         [HttpPatch("{id}")]
-        public ActionResult<Note> Patch(string id, JsonPatchDocument<Note> note)
+        public async Task<ActionResult<Note>> Patch(string id, JsonPatchDocument<Note> note)
         {
-            if (note == null) return BadRequest();
+            logger.LogDebug($"Patching note: {id}");
 
-            var patchedNote = new Note();
+            var noteToPatch = await notesService.GetNoteAsync(id);
 
-            note.ApplyTo(patchedNote);
+            if (noteToPatch == null)
+            {
+                logger.LogDebug($"Unable to find note: {id}");
+                return NotFound();
+            }
 
-            logger.LogDebug($"Patched note {patchedNote.Id}");
+            var placeholderNote = new Note(noteToPatch);
+            note.ApplyTo(placeholderNote);
 
-            return Ok(patchedNote);
+            var patchedNote = await notesService.UpdateNoteAsync(id, placeholderNote.Title, placeholderNote.Content);
+
+            logger.LogDebug($"Patched note {noteToPatch.Id}");
+
+            return Ok(new Note(patchedNote));
         }
     }
 }

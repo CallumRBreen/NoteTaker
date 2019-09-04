@@ -6,8 +6,9 @@ namespace NoteTaker.Core.Services.Interfaces
 {
     public interface INotesService
     {
-        Note GetNote(string id);
-        Note CreateNote(string title, string name);
+        Task<Note> GetNoteAsync(string id);
+        Task<Note> CreateNoteAsync(string title, string content);
+        Task<Note> UpdateNoteAsync(string id, string title, string content);
         Task<List<Note>> GetNotesAsync(string searchText);
     }
 }

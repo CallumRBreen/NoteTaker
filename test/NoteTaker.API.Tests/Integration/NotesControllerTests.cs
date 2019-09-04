@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -8,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using NoteTaker.API.Tests.TestHelpers;
 using NoteTaker.API.ViewModels;
@@ -25,6 +23,7 @@ namespace NoteTaker.API.Tests.Integration
             this.factory = factory;
         }
 
+
         [Fact]
         public async Task Get_All_Notes_Successfully()
         {
@@ -40,13 +39,13 @@ namespace NoteTaker.API.Tests.Integration
         {
             var client = factory.CreateClient();
 
-            var response = await client.GetAsync("api/notes?text=Apples");
+            var response = await client.GetAsync("api/notes?text=apples");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var responseModel = await response.Content.ReadAsAsync<List<Note>>();
 
-            Assert.Equal("Apples", responseModel.First().Content);
+            Assert.Equal("Apples", responseModel.First().Title);
         }
 
         [Fact]
@@ -54,7 +53,7 @@ namespace NoteTaker.API.Tests.Integration
         {
             var client = factory.CreateClient();
 
-            var response = await client.GetAsync($"api/notes/{Guid.NewGuid().ToString()}");
+            var response = await client.GetAsync($"api/notes/11111111-1234-4133-8c69-40ca0509be6a");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
@@ -64,9 +63,7 @@ namespace NoteTaker.API.Tests.Integration
         {
             var client = factory.CreateClient();
             
-            var httpContent = new StringContent(JsonConvert.SerializeObject(GetUpdateNoteTestData()));
-
-            var response = await client.PutAsJsonAsync($"api/notes/{Guid.NewGuid().ToString()}", httpContent);
+            var response = await client.PutAsJsonAsync($"api/notes/22222222-4321-1234-4321-40ca0509be6a", GetUpdateNoteTestData());
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
@@ -76,9 +73,7 @@ namespace NoteTaker.API.Tests.Integration
         {
             var client = factory.CreateClient();
 
-            var httpContent = new StringContent(JsonConvert.SerializeObject(GetCreateNoteTestData()));
-
-            var response = await client.PostAsJsonAsync($"api/notes", httpContent);
+            var response = await client.PostAsJsonAsync($"api/notes", GetCreateNoteTestData());
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
@@ -92,7 +87,7 @@ namespace NoteTaker.API.Tests.Integration
 
             var httpContent = new StringContent(JsonConvert.SerializeObject(operations), Encoding.UTF8, "application/json");
 
-            var response = await client.PatchAsync($"api/notes/{Guid.NewGuid().ToString()}", httpContent);
+            var response = await client.PatchAsync($"api/notes/33333333-4321-1234-4321-40ca0509be6a", httpContent);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -120,12 +115,10 @@ namespace NoteTaker.API.Tests.Integration
                 }
             };
 
-            var jsonPatchDocument =  new JsonPatchDocument<Note>(operations, new JsonContractResolver(new JsonMediaTypeFormatter()));
-
-            return jsonPatchDocument;
+            return new JsonPatchDocument<Note>(operations, new JsonContractResolver(new JsonMediaTypeFormatter()));
         }
 
-        private static UpdateNote GetUpdateNoteTestData() => new UpdateNote {Title = "New Note", Content = "New Note Content"};
+        private static UpdateNote GetUpdateNoteTestData() => new UpdateNote { Title = "New Note", Content = "New Note Content" };
 
         private static CreateNote GetCreateNoteTestData() => new CreateNote { Title = "New Note", Content = "New Note Content" };
     }

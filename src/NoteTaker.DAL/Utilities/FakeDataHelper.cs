@@ -14,15 +14,7 @@ namespace NoteTaker.DAL.Utilities
 
             for (int i = 0; i < count; i++)
             {
-                yield return new Note()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    InternalId = i,
-                    Title = faker.Lorem.Lines(1),
-                    Content = faker.Lorem.Paragraphs(2),
-                    Created = DateTime.Now.AddDays(-7),
-                    Modified = DateTime.Now
-                };
+                yield return new Note(faker.Lorem.Lines(1), faker.Lorem.Paragraphs(2));
             }
         }
     }

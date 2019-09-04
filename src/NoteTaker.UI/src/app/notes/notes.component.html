@@ -25,7 +25,7 @@
             {{ note.content | htmlToPlaintext | limitTo: 60 }}
           </div>
           <div matLine>
-            {{ note.created | timeAgo }}
+            {{ note.modified | timeAgo }}
           </div>
           <!-- <mat-icon>star_border</mat-icon> -->
           <mat-divider></mat-divider>

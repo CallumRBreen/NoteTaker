@@ -17,6 +17,11 @@ namespace NoteTaker.API.ViewModels
 
         public Note(Core.Models.Note note)
         {
+            if (note == null)
+            {
+                return;
+            }
+
             Id = note.Id;
             Title = note.Title;
             Content = note.Content;

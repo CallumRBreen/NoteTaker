@@ -18,14 +18,37 @@ namespace NoteTaker.Core.Services.Implementations
             this.context = context;
         }
 
-        public Note GetNote(string id)
+        public async Task<Note> GetNoteAsync(string id)
         {
-            throw new System.NotImplementedException();
+            var note = await context.Notes.FirstOrDefaultAsync(n => n.Id == id);
+
+            if (note == null) return null;
+
+            return new Note(note);
         }
 
-        public Note CreateNote(string title, string name)
+        public async Task<Note> CreateNoteAsync(string title, string name)
         {
-            throw new System.NotImplementedException();
+            var note = new DAL.Entities.Note(title, name);
+
+            context.Notes.Add(note);
+
+            await context.SaveChangesAsync();
+
+            return new Note(note);
+        }
+
+        public async Task<Note> UpdateNoteAsync(string id, string title, string content)
+        {
+            var note = await context.Notes.FirstOrDefaultAsync(n => n.Id == id);
+
+            if (note == null) return null;
+
+            note.Update(title, content);
+
+            await context.SaveChangesAsync();
+
+            return new Note(note);
         }
 
         public async Task<List<Note>> GetNotesAsync(string searchText)
@@ -37,6 +60,8 @@ namespace NoteTaker.Core.Services.Implementations
                 notes = notes.Where(n => n.Title.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)
                                          || n.Content.Contains(searchText, StringComparison.InvariantCultureIgnoreCase));
             }
+
+            notes = notes.OrderByDescending(n => n.Modified);
 
             return await notes.Select(n => new Note(n)).ToListAsync();
         }

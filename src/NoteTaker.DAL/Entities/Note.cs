@@ -6,7 +6,23 @@ namespace NoteTaker.DAL.Entities
     {
         public string Title { get; set; }
         public string Content { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime Modified { get; set; }
+
+        public Note()
+        {
+            
+        }
+
+        public Note(string title, string content)
+        {
+            Title = title;
+            Content = content;
+        }
+
+        public void Update(string title, string content)
+        {
+            Title = title;
+            Content = content;
+            Modified = DateTime.UtcNow;
+        }
     }
 }
