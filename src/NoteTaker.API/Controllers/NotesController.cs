@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NoteTaker.API.ViewModels;
+using NoteTaker.API.ViewModelValidators;
 using NoteTaker.Core.Services.Interfaces;
 
  namespace NoteTaker.API.Controllers
@@ -67,7 +68,7 @@ using NoteTaker.Core.Services.Interfaces;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Note>> Create([FromBody]CreateNote note)
+        public async Task<ActionResult<Note>> Create([FromBody] CreateNote note)
         {
             logger.LogDebug($"Creating note");
 
@@ -92,6 +93,10 @@ using NoteTaker.Core.Services.Interfaces;
             }
 
             var placeholderNote = new Note(noteToPatch);
+
+            var validationResults = new NoteValidator().Validate(placeholderNote);
+            if (!validationResults.IsValid) return BadRequest(validationResults.Errors);
+
             note.ApplyTo(placeholderNote);
 
             var patchedNote = await notesService.UpdateNoteAsync(id, placeholderNote.Title, placeholderNote.Content);

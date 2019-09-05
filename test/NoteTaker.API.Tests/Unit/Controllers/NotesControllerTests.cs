@@ -14,7 +14,7 @@ using NoteTaker.Core.Services.Interfaces;
 using Xunit;
 using Note = NoteTaker.Core.Models.Note;
 
-namespace NoteTaker.API.Tests.Unit
+namespace NoteTaker.API.Tests.Unit.Controllers
 {
     public class NotesControllerTests
     {
