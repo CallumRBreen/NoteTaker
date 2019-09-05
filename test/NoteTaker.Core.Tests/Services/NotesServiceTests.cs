@@ -15,7 +15,7 @@ namespace NoteTaker.Core.Tests.Services
         [Fact]
         public async Task Get_Note_Successfully()
         {
-            var noteId = Guid.NewGuid().ToString();
+            var noteId = Guid.NewGuid();
 
             var options = GetTestInMemoryDatabase("GetNoteAsyncTest");
 
@@ -35,10 +35,10 @@ namespace NoteTaker.Core.Tests.Services
             {
                 var service = new NotesService(context);
 
-                var note = await service.GetNoteAsync(noteId);
+                var note = await service.GetNoteAsync(noteId.ToString());
 
                 Assert.NotNull(note);
-                Assert.Equal(noteId, note.Id);
+                Assert.Equal(noteId.ToString(), note.Id);
             };
         }
 
@@ -60,7 +60,7 @@ namespace NoteTaker.Core.Tests.Services
         [Fact]
         public async Task Update_Note_Successfully()
         {
-            var noteId = Guid.NewGuid().ToString();
+            var noteId = Guid.NewGuid();
 
             var options = GetTestInMemoryDatabase("UpdateNoteAsyncTest");
 
@@ -80,7 +80,7 @@ namespace NoteTaker.Core.Tests.Services
             {
                 var service = new NotesService(context);
 
-                var updatedNote = await service.UpdateNoteAsync(noteId, "New Title", "New Content");
+                var updatedNote = await service.UpdateNoteAsync(noteId.ToString(), "New Title", "New Content");
 
                 Assert.NotNull(updatedNote);
                 Assert.Equal("New Title",updatedNote.Title);
@@ -99,7 +99,7 @@ namespace NoteTaker.Core.Tests.Services
                 {
                     new Note
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = Guid.NewGuid(),
                         Title = "Apples",
                         Content = "Oranges",
                         Created = DateTime.Now,
@@ -107,7 +107,7 @@ namespace NoteTaker.Core.Tests.Services
                     },
                     new Note
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = Guid.NewGuid(),
                         Title = "Pineapples",
                         Content = "Bananas",
                         Created = DateTime.Now,
@@ -115,7 +115,7 @@ namespace NoteTaker.Core.Tests.Services
                     },
                     new Note
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = Guid.NewGuid(),
                         Title = "Avocado",
                         Content = "Broccoli",
                         Created = DateTime.Now,
@@ -148,7 +148,7 @@ namespace NoteTaker.Core.Tests.Services
                 {
                     new Note
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = Guid.NewGuid(),
                         Title = "Apples",
                         Content = "Oranges",
                         Created = DateTime.Now,
@@ -156,7 +156,7 @@ namespace NoteTaker.Core.Tests.Services
                     },
                     new Note
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = Guid.NewGuid(),
                         Title = "Pineapples",
                         Content = "Bananas",
                         Created = DateTime.Now,
@@ -164,7 +164,7 @@ namespace NoteTaker.Core.Tests.Services
                     },
                     new Note
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = Guid.NewGuid(),
                         Title = "Avocado",
                         Content = "Broccoli",
                         Created = DateTime.Now,

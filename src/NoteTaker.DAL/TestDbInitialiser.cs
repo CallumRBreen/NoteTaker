@@ -17,7 +17,7 @@ namespace NoteTaker.DAL
                     return;
                 }
 
-                var notes = FakeDataHelper.GetNotes(200);
+                var notes = FakeDataHelper.GetNotes(200).ToList();
 
                 context.Notes.AddRange(notes);
 

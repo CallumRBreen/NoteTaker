@@ -17,7 +17,7 @@ namespace NoteTaker.Core.Models
 
         public Note(DAL.Entities.Note note)
         {
-            Id = note.Id;
+            Id = note.Id.ToString();
             Title = note.Title;
             Content = note.Content;
             Created = note.Created;

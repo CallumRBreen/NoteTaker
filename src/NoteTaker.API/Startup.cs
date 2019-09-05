@@ -32,7 +32,7 @@ namespace NoteTaker.API
                     .AllowAnyHeader();
             }));
 
-            services.AddDbContext<NoteTakerContext>(options => options.UseInMemoryDatabase(databaseName: "NoteTaker"));
+            services.AddDbContext<NoteTakerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("NoteTaker.DAL")));
 
             services.AddMvc()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>())

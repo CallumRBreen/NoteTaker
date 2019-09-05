@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using NoteTaker.DAL.Utilities;
 
@@ -6,7 +7,8 @@ namespace NoteTaker.DAL.Entities
 {
     public class Entity
     {
-        public string Id { get; set; }
+        [Key]
+        public Guid Id { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int InternalId { get; set; }
         public DateTime Created { get; set; }
@@ -14,7 +16,7 @@ namespace NoteTaker.DAL.Entities
 
         protected Entity()
         {
-            Id = GuidHelper.GenerateSequential().ToString();
+            Id = GuidHelper.GenerateSequential();
             Created = DateTime.UtcNow;
             Modified = DateTime.UtcNow;
         }

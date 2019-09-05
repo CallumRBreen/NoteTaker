@@ -20,7 +20,7 @@ namespace NoteTaker.Core.Services.Implementations
 
         public async Task<Note> GetNoteAsync(string id)
         {
-            var note = await context.Notes.FirstOrDefaultAsync(n => n.Id == id);
+            var note = await context.Notes.FirstOrDefaultAsync(n => n.Id.ToString() == id);
 
             if (note == null) return null;
 
@@ -40,7 +40,7 @@ namespace NoteTaker.Core.Services.Implementations
 
         public async Task<Note> UpdateNoteAsync(string id, string title, string content)
         {
-            var note = await context.Notes.FirstOrDefaultAsync(n => n.Id == id);
+            var note = await context.Notes.FirstOrDefaultAsync(n => n.Id.ToString() == id);
 
             if (note == null) return null;
 

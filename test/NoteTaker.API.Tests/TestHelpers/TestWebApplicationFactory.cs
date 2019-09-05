@@ -55,9 +55,9 @@ namespace NoteTaker.API.Tests.TestHelpers
             var notes = GetNotes(50).ToList();
 
             notes[0].Title = "Apples";
-            notes[1].Id = "11111111-1234-4133-8c69-40ca0509be6a";
-            notes[2].Id = "22222222-4321-1234-4321-40ca0509be6a";
-            notes[3].Id = "33333333-4321-1234-4321-40ca0509be6a";
+            notes[1].Id = new Guid("11111111-1234-4133-8c69-40ca0509be6a");;
+            notes[2].Id = new Guid("22222222-4321-1234-4321-40ca0509be6a");;
+            notes[3].Id = new Guid("33333333-4321-1234-4321-40ca0509be6a");;
 
             context.Notes.AddRange(notes);
 
