@@ -7,7 +7,7 @@ namespace NoteTaker.DAL.Entities
         public string Title { get; set; }
         public string Content { get; set; }
 
-        public Note()
+        internal Note()
         {
             
         }

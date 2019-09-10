@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NoteTaker.Core.Services.Implementations;
+using NoteTaker.Core.Tests.Helpers;
 using NoteTaker.DAL;
 using NoteTaker.DAL.Entities;
 using Xunit;
@@ -17,7 +18,7 @@ namespace NoteTaker.Core.Tests.Services
         {
             var noteId = Guid.NewGuid();
 
-            var options = GetTestInMemoryDatabase("GetNoteAsyncTest");
+            var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Get_Note_Successfully));
 
             using (var context = new NoteTakerContext(options))
             {
@@ -45,7 +46,7 @@ namespace NoteTaker.Core.Tests.Services
         [Fact]
         public async Task Create_Note_Successfully()
         {
-            var options = GetTestInMemoryDatabase("CreateNoteAsyncTest");
+            var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Create_Note_Successfully));
 
             using (var context = new NoteTakerContext(options))
             {
@@ -62,7 +63,7 @@ namespace NoteTaker.Core.Tests.Services
         {
             var noteId = Guid.NewGuid();
 
-            var options = GetTestInMemoryDatabase("UpdateNoteAsyncTest");
+            var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Update_Note_Successfully));
 
             using (var context = new NoteTakerContext(options))
             {
@@ -91,7 +92,7 @@ namespace NoteTaker.Core.Tests.Services
         [Fact]
         public async Task Search_Notes_Successfully()
         {
-            var options = GetTestInMemoryDatabase("GetNotesAsyncSearchTest");
+            var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Search_Notes_Successfully));
 
             using (var context = new NoteTakerContext(options))
             {
@@ -140,7 +141,7 @@ namespace NoteTaker.Core.Tests.Services
         [Fact]
         public async Task Get_Notes_OrderedByModifiedDesc_Successfully()
         {
-            var options = GetTestInMemoryDatabase("GetNotesAsyncOrderedTest");
+            var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Get_Notes_OrderedByModifiedDesc_Successfully));
 
             using (var context = new NoteTakerContext(options))
             {
@@ -185,12 +186,6 @@ namespace NoteTaker.Core.Tests.Services
                 Assert.Equal("Apples", notes[1].Title);
                 Assert.Equal("Avocado", notes[2].Title);
             };
-        }
-
-        private DbContextOptions<NoteTakerContext> GetTestInMemoryDatabase(string testDatabaseName)
-        {
-            return new DbContextOptionsBuilder<NoteTakerContext>()
-                .UseInMemoryDatabase(testDatabaseName).Options;
         }
     }
 }

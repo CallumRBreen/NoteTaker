@@ -12,6 +12,7 @@ namespace NoteTaker.DAL
         protected override void OnModelCreating(ModelBuilder builder)
         {
             NoteConfiguration(builder);
+            UserConfiguration(builder);
         }
 
         private static void NoteConfiguration(ModelBuilder builder)
@@ -23,6 +24,16 @@ namespace NoteTaker.DAL
             builder.Entity<Note>().HasIndex(x => x.Created);
         }
 
+        private static void UserConfiguration(ModelBuilder builder)
+        {
+            builder.Entity<User>().ToTable("User");
+            builder.Entity<User>().Property(x => x.Username).IsRequired();
+            builder.Entity<User>().HasIndex(x => x.Username);
+            builder.Entity<User>().Property(x => x.FirstName).IsRequired();
+            builder.Entity<User>().Property(x => x.LastName).IsRequired();
+        }
+
         public DbSet<Note> Notes { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

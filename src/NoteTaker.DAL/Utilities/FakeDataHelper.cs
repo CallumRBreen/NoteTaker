@@ -4,7 +4,7 @@ using NoteTaker.DAL.Entities;
 
 namespace NoteTaker.DAL.Utilities
 {
-    public static class FakeDataHelper
+    internal static class FakeDataHelper
     {
         public static IEnumerable<Note> GetNotes(int count = 10)
         {

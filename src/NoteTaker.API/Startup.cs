@@ -6,10 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using NoteTaker.Core.Extensions;
+using NoteTaker.Core.Models;
 using NoteTaker.Core.Services.Implementations;
 using NoteTaker.Core.Services.Interfaces;
 using NoteTaker.DAL;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace NoteTaker.API
 {
@@ -38,7 +39,9 @@ namespace NoteTaker.API
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>())
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddTransient<INotesService, NotesService>();
+            services.Configure<Security>(Configuration.GetSection("Security"));
+
+            services.AddCoreServices();
 
             services.AddSwaggerGen(c =>
             {

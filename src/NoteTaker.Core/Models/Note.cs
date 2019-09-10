@@ -10,7 +10,7 @@ namespace NoteTaker.Core.Models
         public DateTime Created { get; set; }
         public DateTime Modified { get; set; }
 
-        public Note()
+        internal Note()
         {
             
         }
