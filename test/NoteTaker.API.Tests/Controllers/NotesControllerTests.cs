@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Formatting;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
@@ -48,7 +49,9 @@ namespace NoteTaker.API.Tests.Controllers
 
             var notes = (List<ViewModels.Note>)result?.Value;
 
-            Assert.Equal("Apples", notes?.First().Title);
+            var noteTitle = notes?.FirstOrDefault()?.Title;
+
+            noteTitle.Should().BeEquivalentTo("Apples");
 
             noteService.Verify();
         }
@@ -81,7 +84,7 @@ namespace NoteTaker.API.Tests.Controllers
 
             var result = (await controller.Get(noteId)).Result;
 
-            Assert.True(result is NotFoundResult);
+            result.GetType().Should().Be(typeof(NotFoundResult));
 
             noteService.Verify();
         }
@@ -111,7 +114,7 @@ namespace NoteTaker.API.Tests.Controllers
 
             var updatedNote = (ViewModels.Note)result?.Value;
 
-            Assert.NotNull(updatedNote);
+            updatedNote.Should().NotBeNull();
 
             noteService.Verify();
         }
@@ -131,7 +134,7 @@ namespace NoteTaker.API.Tests.Controllers
 
             var result = (await controller.Update(noteId, updateNote)).Result;
 
-            Assert.True(result is NotFoundResult);
+            result.GetType().Should().Be(typeof(NotFoundResult));
 
             noteService.Verify();
         }
@@ -158,7 +161,7 @@ namespace NoteTaker.API.Tests.Controllers
 
             var createdNote = (ViewModels.Note)result?.Value;
 
-            Assert.NotNull(createdNote);
+            createdNote.Should().NotBeNull();
 
             noteService.Verify();
         }
@@ -188,7 +191,7 @@ namespace NoteTaker.API.Tests.Controllers
 
             var patchedNote = (ViewModels.Note)result?.Value;
 
-            Assert.NotNull(patchedNote);
+            patchedNote.Should().NotBeNull();
 
             noteService.Verify();
         }
@@ -203,7 +206,7 @@ namespace NoteTaker.API.Tests.Controllers
 
             var result = (await controller.Patch(noteId, patchOperations)).Result;
 
-            Assert.True(result is NotFoundResult);
+            result.GetType().Should().Be(typeof(NotFoundResult));
 
             noteService.Verify();
         }

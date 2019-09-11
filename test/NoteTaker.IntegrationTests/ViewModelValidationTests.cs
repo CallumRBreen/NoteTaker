@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAssertions;
 using NoteTaker.API;
 using NoteTaker.API.ViewModels;
 using NoteTaker.IntegrationTests.TestHelpers;
@@ -24,7 +25,7 @@ namespace NoteTaker.IntegrationTests
 
             var response = await client.PostAsJsonAsync("api/notes", GetCreateNoteTestData());
 
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            response.StatusCode.Should().BeEquivalentTo(HttpStatusCode.BadRequest);
         }
 
         private static CreateNote GetCreateNoteTestData() => new CreateNote { Title = null, Content = null };

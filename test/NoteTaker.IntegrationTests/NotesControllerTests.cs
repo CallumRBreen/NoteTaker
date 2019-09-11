@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Newtonsoft.Json;
@@ -32,7 +32,7 @@ namespace NoteTaker.IntegrationTests
 
             var response = await client.GetAsync("api/notes");
 
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            response.EnsureSuccessStatusCode();
         }
 
         [Fact]
@@ -42,11 +42,11 @@ namespace NoteTaker.IntegrationTests
 
             var response = await client.GetAsync("api/notes?text=apples");
 
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            response.EnsureSuccessStatusCode();
 
             var responseModel = await response.Content.ReadAsAsync<List<Note>>();
 
-            Assert.Equal("Apples", responseModel.First().Title);
+            responseModel.First().Title.Should().BeEquivalentTo("Apples");
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace NoteTaker.IntegrationTests
 
             var response = await client.GetAsync($"api/notes/11111111-1234-4133-8c69-40ca0509be6a");
 
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            response.EnsureSuccessStatusCode();
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace NoteTaker.IntegrationTests
 
             var response = await client.PutAsJsonAsync($"api/notes/22222222-4321-1234-4321-40ca0509be6a", GetUpdateNoteTestData());
 
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            response.EnsureSuccessStatusCode();
         }
 
         [Fact]
@@ -76,7 +76,7 @@ namespace NoteTaker.IntegrationTests
 
             var response = await client.PostAsJsonAsync($"api/notes", GetCreateNoteTestData());
 
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            response.EnsureSuccessStatusCode();
         }
 
         [Fact]
@@ -90,12 +90,12 @@ namespace NoteTaker.IntegrationTests
 
             var response = await client.PatchAsync($"api/notes/33333333-4321-1234-4321-40ca0509be6a", httpContent);
 
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            response.EnsureSuccessStatusCode();
 
             var responseModel = await response.Content.ReadAsAsync<Note>();
 
-            Assert.Equal("New Title", responseModel.Title);
-            Assert.Equal("New Content", responseModel.Content);
+            responseModel.Title.Should().BeEquivalentTo("New Title");
+            responseModel.Content.Should().BeEquivalentTo("New Content");
         }
 
         private static JsonPatchDocument<Note> GetPatchNoteOperations()

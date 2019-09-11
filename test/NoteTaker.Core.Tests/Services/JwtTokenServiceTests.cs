@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using FluentAssertions;
 using Microsoft.Extensions.Options;
 using NoteTaker.Core.Models;
 using NoteTaker.Core.Services.Implementations;
@@ -24,7 +25,9 @@ namespace NoteTaker.Core.Tests.Services
         [InlineData("Apples", null)]
         public void If_UserId_Is_Null_Throw_ArgumentNullException(string userId, string username)
         {
-            Assert.Throws<ArgumentNullException>(() => service.GetToken(userId, username));
+            Action action = () => service.GetToken(userId, username);
+
+            action.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -37,8 +40,8 @@ namespace NoteTaker.Core.Tests.Services
 
             var token = GetJwtSecurityToken(tokenString);
 
-            Assert.Equal(userId, token.Claims.First(x => x.Type.Equals(JwtRegisteredClaimNames.NameId)).Value);
-            Assert.Equal(username, token.Claims.First(x => x.Type.Equals(JwtRegisteredClaimNames.UniqueName)).Value);
+            userId.Should().BeEquivalentTo(token.Claims.First(x => x.Type.Equals(JwtRegisteredClaimNames.NameId)).Value);
+            username.Should().BeEquivalentTo(token.Claims.First(x => x.Type.Equals(JwtRegisteredClaimNames.UniqueName)).Value);
         }
 
         private JwtSecurityToken GetJwtSecurityToken(string token) => new JwtSecurityTokenHandler().ReadJwtToken(token);

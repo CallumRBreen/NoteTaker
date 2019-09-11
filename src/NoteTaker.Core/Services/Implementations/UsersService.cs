@@ -44,5 +44,16 @@ namespace NoteTaker.Core.Services.Implementations
 
             return new AuthenticatedUser(user, token);
         }
+
+        public async Task<User> CreateUserAsync(CreateUser createUser)
+        {
+            var user = new DAL.Entities.User(createUser.Username, createUser.FirstName, createUser.LastName, createUser.Password);
+
+            context.Users.Add(user);
+
+            await context.SaveChangesAsync();
+
+            return new User(user);
+        }
     }
 }

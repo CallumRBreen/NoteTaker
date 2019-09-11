@@ -22,5 +22,10 @@
     <ProjectReference Include="..\NoteTaker.Core\NoteTaker.Core.csproj" />
     <ProjectReference Include="..\NoteTaker.DAL\NoteTaker.DAL.csproj" />
   </ItemGroup>
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+		  <_Parameter1>NoteTaker.IntegrationTests</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
 
 </Project>

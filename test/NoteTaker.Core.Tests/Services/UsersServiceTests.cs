@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NoteTaker.Core.Services.Implementations;
@@ -49,8 +50,8 @@ namespace NoteTaker.Core.Tests.Services
 
                 var authenticatedUser = await usersService.AuthenticateAsync("JohnSmith", password);
 
-                Assert.NotNull(authenticatedUser);
-                Assert.NotNull(authenticatedUser.Token);
+                authenticatedUser.Should().NotBeNull();
+                authenticatedUser.Token.Should().NotBeNull();
 
                 passwordHashingService.Verify();
                 tokenService.Verify();
@@ -76,7 +77,7 @@ namespace NoteTaker.Core.Tests.Services
 
                 var authenticatedUser = await usersService.AuthenticateAsync("JohnSmith", "Apples");
 
-                Assert.Null(authenticatedUser);
+                authenticatedUser.Should().BeNull();
 
                 passwordHashingService.Verify();
             }

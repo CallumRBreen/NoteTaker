@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using FluentAssertions;
 using NoteTaker.Core.Services.Implementations;
 using NoteTaker.Core.Tests.Helpers;
 using NoteTaker.DAL;
@@ -38,8 +38,8 @@ namespace NoteTaker.Core.Tests.Services
 
                 var note = await service.GetNoteAsync(noteId.ToString());
 
-                Assert.NotNull(note);
-                Assert.Equal(noteId.ToString(), note.Id);
+                note.Should().NotBeNull();
+                noteId.ToString().Should().BeEquivalentTo(note.Id);
             };
         }
 
@@ -54,7 +54,7 @@ namespace NoteTaker.Core.Tests.Services
 
                 var note = await service.CreateNoteAsync("Apples", "Oranges");
 
-                Assert.NotNull(note);
+                note.Should().NotBeNull();
             };
         }
 
@@ -83,9 +83,9 @@ namespace NoteTaker.Core.Tests.Services
 
                 var updatedNote = await service.UpdateNoteAsync(noteId.ToString(), "New Title", "New Content");
 
-                Assert.NotNull(updatedNote);
-                Assert.Equal("New Title",updatedNote.Title);
-                Assert.Equal("New Content", updatedNote.Content);
+                updatedNote.Should().NotBeNull();
+                updatedNote.Title.Should().BeEquivalentTo("New Title");
+                updatedNote.Content.Should().BeEquivalentTo("New Content");
             };
         }
 
@@ -133,8 +133,8 @@ namespace NoteTaker.Core.Tests.Services
 
                 var notes = await service.GetNotesAsync("Avocado");
 
-                Assert.Single(notes);
-                Assert.Equal("Avocado", notes.First().Title);
+                notes.Should().ContainSingle();
+                notes.First().Title.Should().BeEquivalentTo("Avocado");
             };
         }
 
@@ -182,9 +182,9 @@ namespace NoteTaker.Core.Tests.Services
 
                 var notes = await service.GetNotesAsync(string.Empty);
 
-                Assert.Equal("Pineapples", notes[0].Title);
-                Assert.Equal("Apples", notes[1].Title);
-                Assert.Equal("Avocado", notes[2].Title);
+                notes[0].Title.Should().BeEquivalentTo("Pineapples");
+                notes[1].Title.Should().BeEquivalentTo("Apples");
+                notes[2].Title.Should().BeEquivalentTo("Avocado");
             };
         }
     }

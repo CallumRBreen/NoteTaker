@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentAssertions;
 using NoteTaker.Core.Services.Implementations;
 using Xunit;
 
@@ -19,7 +20,9 @@ namespace NoteTaker.Core.Tests.Services
         [InlineData("   ")]
         public void If_Password_IsNullOrEmpty_ThrowArgumentException(string password)
         {
-            Assert.Throws<ArgumentException>(() => service.GetPasswordHash(password));
+            Action action = () => service.GetPasswordHash(password);
+
+            action.Should().Throw<ArgumentException>().And.ParamName.Should().Be("password");
         }
 
         [Theory]
@@ -27,7 +30,9 @@ namespace NoteTaker.Core.Tests.Services
         [InlineData("", null)]
         public void When_Verifying_Hash_If_Password_IsNull_ThrowArgumentNullException(string password, string passwordHash)
         {
-            Assert.Throws<ArgumentNullException>(() => service.VerifyPassword(password, passwordHash));
+            Action action = () => service.VerifyPassword(password, passwordHash);
+
+            action.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -37,7 +42,7 @@ namespace NoteTaker.Core.Tests.Services
 
             var passwordHash = service.GetPasswordHash(password);
 
-            Assert.True(service.VerifyPassword(password, passwordHash));
+            service.VerifyPassword(password, passwordHash).Should().BeTrue();
         }
 
         [Fact]
@@ -48,7 +53,7 @@ namespace NoteTaker.Core.Tests.Services
             var passwordHashOne = service.GetPasswordHash(password);
             var passwordHashTwo = service.GetPasswordHash(password);
 
-            Assert.NotEqual(passwordHashOne, passwordHashTwo);
+            passwordHashOne.Should().NotBe(passwordHashTwo);
         }
     }
 }

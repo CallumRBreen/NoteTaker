@@ -10,5 +10,20 @@ namespace NoteTaker.Core.Models
         public string LastName { get; set; }
         public DateTime Created { get; set; }
         public DateTime Modified { get; set; }
+
+        internal User()
+        {
+
+        }
+
+        public User(DAL.Entities.User user)
+        {
+            Id = user.Id.ToString();
+            Username = user.Username;
+            FirstName = user.FirstName;
+            LastName = user.LastName;
+            Created = user.Created;
+            Modified = user.Modified;
+        }
     }
 }

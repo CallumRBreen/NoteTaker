@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NoteTaker.API.ViewModels;
-using NoteTaker.Core.Models;
 using NoteTaker.Core.Services.Interfaces;
 
 namespace NoteTaker.API.Controllers
@@ -11,21 +10,21 @@ namespace NoteTaker.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUsersService _usersService;
+        private readonly IUsersService usersService;
         private readonly ILogger<UsersController> logger;
 
         public UsersController(IUsersService usersService, ILogger<UsersController> logger)
         {
-            this._usersService = usersService;
+            this.usersService = usersService;
             this.logger = logger;
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<ActionResult<AuthenticatedUser>> Login([FromBody] UserLogin userLogin)
         {
             logger.LogDebug($"Attempting to authenticate user {userLogin.Username}");
 
-            var authenticatedUser = await _usersService.AuthenticateAsync(userLogin.Username, userLogin.Password);
+            var authenticatedUser = await usersService.AuthenticateAsync(userLogin.Username, userLogin.Password);
 
             if (authenticatedUser == null)
             {
@@ -33,7 +32,17 @@ namespace NoteTaker.API.Controllers
                 return BadRequest("Username or password is incorrect");
             }
 
-            return Ok(authenticatedUser);
+            return Ok(new AuthenticatedUser(authenticatedUser));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<User>> Create([FromBody] CreateUser createUser)
+        {
+            logger.LogDebug($"Attempting to create user with username {createUser.Username}");
+
+            var createdUser = await usersService.CreateUserAsync(createUser.ToCreateUser());
+
+            return Created($"api/users/{createdUser.Id}", createdUser);
         }
     }
 }

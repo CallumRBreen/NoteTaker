@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NoteTaker.API.Controllers;
 using NoteTaker.API.ViewModels;
-using NoteTaker.Core.Models;
 using NoteTaker.Core.Services.Interfaces;
 using Xunit;
 
@@ -31,7 +30,7 @@ namespace NoteTaker.API.Tests.Controllers
                 Password = "apples"
             };
 
-            userService.Setup(x => x.AuthenticateAsync(It.Is<string>(y => y.Equals(userLogin.Username)),It.Is<string>(y => y.Equals(userLogin.Password)))).ReturnsAsync(new AuthenticatedUser
+            userService.Setup(x => x.AuthenticateAsync(It.Is<string>(y => y.Equals(userLogin.Username)),It.Is<string>(y => y.Equals(userLogin.Password)))).ReturnsAsync(new Core.Models.AuthenticatedUser
             {
                 Id = Guid.NewGuid().ToString(),
                 Username = userLogin.Username,
