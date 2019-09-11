@@ -43,7 +43,7 @@ namespace NoteTaker.Core.Tests.Services
                 passwordHashingService.Setup(x => x.VerifyPassword(It.Is<string>(y => y.Equals(password)),
                             It.Is<string>(y => y.Equals(passwordHash)))).Returns(true).Verifiable();
 
-                tokenService.Setup(x => x.GetToken(It.IsAny<string>())).Returns(Guid.NewGuid().ToString).Verifiable();
+                tokenService.Setup(x => x.GetToken(It.IsAny<string>(), It.IsAny<string>())).Returns(Guid.NewGuid().ToString).Verifiable();
 
                 var usersService = new UsersService(context, logger, passwordHashingService.Object, tokenService.Object);
 

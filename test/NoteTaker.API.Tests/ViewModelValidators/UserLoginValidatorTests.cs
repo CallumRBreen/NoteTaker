@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FluentValidation.TestHelper;
+﻿using FluentValidation.TestHelper;
 using NoteTaker.API.ViewModelValidators;
 using Xunit;
 
-namespace NoteTaker.API.Tests.Unit.ViewModelValidators
+namespace NoteTaker.API.Tests.ViewModelValidators
 {
     public class UserLoginValidatorTests
     {

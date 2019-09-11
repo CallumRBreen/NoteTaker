@@ -18,9 +18,10 @@ namespace NoteTaker.Core.Services.Implementations
             this.securityOptions = securityOptions.Value;
         }
 
-        public string GetToken(string userId)
+        public string GetToken(string userId, string username)
         {
             if (userId == null) throw new ArgumentNullException(nameof(userId));
+            if (username == null) throw new ArgumentNullException(nameof(username));
 
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -30,7 +31,8 @@ namespace NoteTaker.Core.Services.Implementations
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, userId)
+                    new Claim(JwtRegisteredClaimNames.NameId, userId),
+                    new Claim(JwtRegisteredClaimNames.UniqueName, username)
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

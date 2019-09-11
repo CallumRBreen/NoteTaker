@@ -9,7 +9,7 @@ using NoteTaker.Core.Models;
 using NoteTaker.Core.Services.Interfaces;
 using Xunit;
 
-namespace NoteTaker.API.Tests.Unit.Controllers
+namespace NoteTaker.API.Tests.Controllers
 {
     public class UsersControllerTests
     {

@@ -1,11 +1,12 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using NoteTaker.API.Tests.TestHelpers;
+using NoteTaker.API;
 using NoteTaker.API.ViewModels;
+using NoteTaker.IntegrationTests.TestHelpers;
 using Xunit;
 
-namespace NoteTaker.API.Tests.Integration
+namespace NoteTaker.IntegrationTests
 {
     public class ViewModelValidationTests : IClassFixture<TestWebApplicationFactory<Startup>>
     {

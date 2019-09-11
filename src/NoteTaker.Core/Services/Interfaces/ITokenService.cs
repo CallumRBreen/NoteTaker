@@ -6,6 +6,6 @@ namespace NoteTaker.Core.Services.Interfaces
 {
     public interface ITokenService
     {
-        string GetToken(string userId);
+        string GetToken(string userId, string username);
     }
 }

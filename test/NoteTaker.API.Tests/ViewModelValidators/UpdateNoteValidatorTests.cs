@@ -2,7 +2,7 @@
 using NoteTaker.API.ViewModelValidators;
 using Xunit;
 
-namespace NoteTaker.API.Tests.Unit.ViewModelValidators
+namespace NoteTaker.API.Tests.ViewModelValidators
 {
     public class UpdateNoteValidatorTests
     {

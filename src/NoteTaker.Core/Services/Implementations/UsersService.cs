@@ -40,7 +40,7 @@ namespace NoteTaker.Core.Services.Implementations
                 return null;
             }
 
-            var token = tokenService.GetToken(user.Id.ToString());
+            var token = tokenService.GetToken(user.Id.ToString(), user.Username);
 
             return new AuthenticatedUser(user, token);
         }

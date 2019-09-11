@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Newtonsoft.Json;
-using NoteTaker.API.Tests.TestHelpers;
+using NoteTaker.API;
 using NoteTaker.API.ViewModels;
+using NoteTaker.IntegrationTests.TestHelpers;
 using Xunit;
 
-namespace NoteTaker.API.Tests.Integration
+namespace NoteTaker.IntegrationTests
 {
     public class NotesControllerTests : IClassFixture<TestWebApplicationFactory<Startup>>
     {
@@ -62,7 +63,7 @@ namespace NoteTaker.API.Tests.Integration
         public async Task Update_Note_Successfully()
         {
             var client = factory.CreateClient();
-            
+
             var response = await client.PutAsJsonAsync($"api/notes/22222222-4321-1234-4321-40ca0509be6a", GetUpdateNoteTestData());
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
