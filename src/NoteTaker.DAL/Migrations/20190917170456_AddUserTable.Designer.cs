@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NoteTaker.DAL;
 
 namespace NoteTaker.DAL.Migrations
 {
     [DbContext(typeof(NoteTakerContext))]
-    partial class NoteTakerContextModelSnapshot : ModelSnapshot
+    [Migration("20190917170456_AddUserTable")]
+    partial class AddUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,16 +68,14 @@ namespace NoteTaker.DAL.Migrations
 
                     b.Property<DateTime>("Modified");
 
-                    b.Property<string>("PasswordHash")
-                        .IsRequired();
+                    b.Property<string>("PasswordHash");
 
                     b.Property<string>("Username")
                         .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Username")
-                        .IsUnique();
+                    b.HasIndex("Username");
 
                     b.ToTable("User");
                 });

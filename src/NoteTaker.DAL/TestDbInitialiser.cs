@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using NoteTaker.DAL.Entities;
 using NoteTaker.DAL.Utilities;
 
 namespace NoteTaker.DAL
@@ -12,16 +13,19 @@ namespace NoteTaker.DAL
         {
             using (var context = new NoteTakerContext(serviceProvider.GetRequiredService<DbContextOptions<NoteTakerContext>>()))
             {
-                if (context.Notes.Any())
+                if (!context.Notes.Any())
                 {
-                    return;
+                    var notes = FakeDataHelper.GetNotes(200).ToList();
+
+                    context.Notes.AddRange(notes);
+
+                    context.SaveChanges();
                 }
 
-                var notes = FakeDataHelper.GetNotes(200).ToList();
-
-                context.Notes.AddRange(notes);
-
-                context.SaveChanges();
+                if (!context.Users.Any())
+                {
+                    var user = new User("CallumBreen", "Callum", "Breen", "");
+                }
             }
         }
     }

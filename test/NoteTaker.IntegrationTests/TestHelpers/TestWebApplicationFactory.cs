@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using Bogus;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using NoteTaker.Core.Models;
 using NoteTaker.DAL;
-using NoteTaker.DAL.Entities;
+using Note = NoteTaker.DAL.Entities.Note;
+using User = NoteTaker.DAL.Entities.User;
 
 namespace NoteTaker.IntegrationTests.TestHelpers
 {
@@ -48,6 +55,14 @@ namespace NoteTaker.IntegrationTests.TestHelpers
                         logger.LogError(ex, $"Error occured when starting {nameof(TestWebApplicationFactory<TStartup>)}");
                     }
                 }
+            });
+
+            builder.ConfigureAppConfiguration((ctx, config) =>
+            {
+                config.AddInMemoryCollection(new Dictionary<string, string>
+                {
+                    ["Security:JwtSecret"] = TestJwtTokenHelper.JwtSecret
+                });
             });
         }
 

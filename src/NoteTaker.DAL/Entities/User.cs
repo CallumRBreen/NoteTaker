@@ -7,6 +7,11 @@
         public string LastName { get; set; }
         public string PasswordHash { get; set; }
 
+        internal User()
+        {
+            
+        }
+
         public User(string username, string firstName, string lastName, string passwordHash)
         {
             Username = username;

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,8 @@ using NoteTaker.Core.Services.Interfaces;
 
  namespace NoteTaker.API.Controllers
 {
+
+    [Authorize]
     [Route("api/notes")]
     [ApiController]
     public class NotesController : ControllerBase

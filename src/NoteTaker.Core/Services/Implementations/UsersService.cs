@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NoteTaker.Core.Models;
@@ -47,7 +48,14 @@ namespace NoteTaker.Core.Services.Implementations
 
         public async Task<User> CreateUserAsync(CreateUser createUser)
         {
-            var user = new DAL.Entities.User(createUser.Username, createUser.FirstName, createUser.LastName, createUser.Password);
+            if (context.Users.Any(x => x.Username == createUser.Username))
+            {
+                return null;
+            }
+
+            var passwordHash = passwordHashingService.GetPasswordHash(createUser.Password);
+
+            var user = new DAL.Entities.User(createUser.Username, createUser.FirstName, createUser.LastName, passwordHash);
 
             context.Users.Add(user);
 

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NoteTaker.API.ViewModels;
@@ -6,6 +7,7 @@ using NoteTaker.Core.Services.Interfaces;
 
 namespace NoteTaker.API.Controllers
 {
+    [Authorize]
     [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -19,6 +21,7 @@ namespace NoteTaker.API.Controllers
             this.logger = logger;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<AuthenticatedUser>> Login([FromBody] UserLogin userLogin)
         {
@@ -35,6 +38,7 @@ namespace NoteTaker.API.Controllers
             return Ok(new AuthenticatedUser(authenticatedUser));
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<User>> Create([FromBody] CreateUser createUser)
         {
@@ -42,7 +46,13 @@ namespace NoteTaker.API.Controllers
 
             var createdUser = await usersService.CreateUserAsync(createUser.ToCreateUser());
 
-            return Created($"api/users/{createdUser.Id}", createdUser);
+            if (createdUser == null)
+            {
+                logger.LogDebug($"Unable to create user {createUser.Username}");
+                return BadRequest($"Username {createUser.Username} already taken");
+            }
+
+            return Created($"api/users/{createdUser.Id}", new User(createdUser));
         }
     }
 }

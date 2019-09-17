@@ -28,9 +28,10 @@ namespace NoteTaker.DAL
         {
             builder.Entity<User>().ToTable("User");
             builder.Entity<User>().Property(x => x.Username).IsRequired();
-            builder.Entity<User>().HasIndex(x => x.Username);
+            builder.Entity<User>().HasIndex(x => x.Username).IsUnique();
             builder.Entity<User>().Property(x => x.FirstName).IsRequired();
             builder.Entity<User>().Property(x => x.LastName).IsRequired();
+            builder.Entity<User>().Property(x => x.PasswordHash).IsRequired();
         }
 
         public DbSet<Note> Notes { get; set; }

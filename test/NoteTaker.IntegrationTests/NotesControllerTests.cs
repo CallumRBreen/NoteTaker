@@ -12,24 +12,23 @@ using NoteTaker.API;
 using NoteTaker.API.ViewModels;
 using NoteTaker.IntegrationTests.TestHelpers;
 using Xunit;
+using Note = NoteTaker.API.ViewModels.Note;
 
 namespace NoteTaker.IntegrationTests
 {
     public class NotesControllerTests : IClassFixture<TestWebApplicationFactory<Startup>>
     {
-        private readonly TestWebApplicationFactory<Startup> factory;
+        private readonly HttpClient client;
 
         public NotesControllerTests(TestWebApplicationFactory<Startup> factory)
         {
-            this.factory = factory;
+            
+            this.client = factory.CreateClient().AddTestJwtHeader();
         }
-
 
         [Fact]
         public async Task Get_All_Notes_Successfully()
         {
-            var client = factory.CreateClient();
-
             var response = await client.GetAsync("api/notes");
 
             response.EnsureSuccessStatusCode();
@@ -38,8 +37,6 @@ namespace NoteTaker.IntegrationTests
         [Fact]
         public async Task Search_All_Notes_Successfully()
         {
-            var client = factory.CreateClient();
-
             var response = await client.GetAsync("api/notes?text=apples");
 
             response.EnsureSuccessStatusCode();
@@ -52,8 +49,6 @@ namespace NoteTaker.IntegrationTests
         [Fact]
         public async Task Get_Note_Successfully()
         {
-            var client = factory.CreateClient();
-
             var response = await client.GetAsync($"api/notes/11111111-1234-4133-8c69-40ca0509be6a");
 
             response.EnsureSuccessStatusCode();
@@ -62,8 +57,6 @@ namespace NoteTaker.IntegrationTests
         [Fact]
         public async Task Update_Note_Successfully()
         {
-            var client = factory.CreateClient();
-
             var response = await client.PutAsJsonAsync($"api/notes/22222222-4321-1234-4321-40ca0509be6a", GetUpdateNoteTestData());
 
             response.EnsureSuccessStatusCode();
@@ -72,8 +65,6 @@ namespace NoteTaker.IntegrationTests
         [Fact]
         public async Task Create_Note_Successfully()
         {
-            var client = factory.CreateClient();
-
             var response = await client.PostAsJsonAsync($"api/notes", GetCreateNoteTestData());
 
             response.EnsureSuccessStatusCode();
@@ -82,8 +73,6 @@ namespace NoteTaker.IntegrationTests
         [Fact]
         public async Task Patch_Note_Successfully()
         {
-            var client = factory.CreateClient();
-
             var operations = GetPatchNoteOperations();
 
             var httpContent = new StringContent(JsonConvert.SerializeObject(operations), Encoding.UTF8, "application/json");

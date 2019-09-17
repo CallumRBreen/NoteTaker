@@ -3,12 +3,13 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
+using NoteTaker.Core.Models;
 using NoteTaker.Core.Services.Implementations;
 using NoteTaker.Core.Services.Interfaces;
 using NoteTaker.Core.Tests.Helpers;
 using NoteTaker.DAL;
-using NoteTaker.DAL.Entities;
 using Xunit;
+using User = NoteTaker.DAL.Entities.User;
 
 namespace NoteTaker.Core.Tests.Services
 {
@@ -82,5 +83,74 @@ namespace NoteTaker.Core.Tests.Services
                 passwordHashingService.Verify();
             }
         }
+
+        [Fact]
+        public async Task Create_User_Successfully()
+        {
+            var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Create_User_Successfully));
+
+            using (var context = new NoteTakerContext(options))
+            {
+                var createUser = new CreateUser()
+                {
+                    Username = "JohnSmith",
+                    FirstName = "John",
+                    LastName = "Smith",
+                    Password = "Apples"
+                };
+
+                passwordHashingService.Setup(x => x.GetPasswordHash(It.Is<string>(y => y.Equals("Apples")))).Returns(Guid.NewGuid().ToString).Verifiable();
+
+                var usersService = new UsersService(context, logger, passwordHashingService.Object, tokenService.Object);
+
+                var createdUser = await usersService.CreateUserAsync(createUser);
+
+                createdUser.Id.Should().NotBeNull();
+
+                passwordHashingService.Verify();
+            }
+        }
+
+        [Fact]
+        public async Task Ensure_Unique_Username()
+        {
+            var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Ensure_Unique_Username));
+
+            using (var context = new NoteTakerContext(options))
+            {
+                var user = new User
+                {
+                    Id = Guid.NewGuid(),
+                    Username = "JohnSmith",
+                    FirstName = "John",
+                    LastName = "Smith",
+                    InternalId = 1,
+                    Created = DateTime.Now,
+                    Modified = DateTime.Now,
+                    PasswordHash = Guid.NewGuid().ToString()
+                };
+
+                context.Users.Add(user);
+                context.SaveChanges();
+            }
+
+            using (var context = new NoteTakerContext(options))
+            {
+                var createUser = new CreateUser()
+                {
+                    Username = "JohnSmith",
+                    FirstName = "John",
+                    LastName = "Smith",
+                    Password = "Apples"
+                };
+
+                var usersService = new UsersService(context, logger, passwordHashingService.Object, tokenService.Object);
+
+                var createdUser = await usersService.CreateUserAsync(createUser);
+
+                createdUser.Should().BeNull();
+            }
+        }
+
     }
 }

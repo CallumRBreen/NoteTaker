@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FluentValidation.TestHelper;
+﻿using FluentValidation.TestHelper;
 using NoteTaker.API.ViewModelValidators;
 using Xunit;
 
@@ -9,7 +6,7 @@ namespace NoteTaker.API.Tests.ViewModelValidators
 {
     public class CreateUserValidatorTests
     {
-        private CreateUserValidator validator;
+        private readonly CreateUserValidator validator;
 
         public CreateUserValidatorTests()
         {

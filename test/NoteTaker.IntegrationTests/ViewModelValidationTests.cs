@@ -11,18 +11,16 @@ namespace NoteTaker.IntegrationTests
 {
     public class ViewModelValidationTests : IClassFixture<TestWebApplicationFactory<Startup>>
     {
-        private readonly TestWebApplicationFactory<Startup> factory;
+        private readonly HttpClient client;
 
         public ViewModelValidationTests(TestWebApplicationFactory<Startup> factory)
         {
-            this.factory = factory;
+            this.client = factory.CreateClient().AddTestJwtHeader();
         }
 
         [Fact]
         public async Task FluentValidation_Automatically_Applied()
         {
-            var client = factory.CreateClient();
-
             var response = await client.PostAsJsonAsync("api/notes", GetCreateNoteTestData());
 
             response.StatusCode.Should().BeEquivalentTo(HttpStatusCode.BadRequest);

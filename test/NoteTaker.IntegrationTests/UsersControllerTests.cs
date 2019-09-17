@@ -10,18 +10,16 @@ namespace NoteTaker.IntegrationTests
 {
     public class UsersControllerTests : IClassFixture<TestWebApplicationFactory<Startup>>
     {
-        private readonly TestWebApplicationFactory<Startup> factory;
+        private readonly HttpClient client;
 
         public UsersControllerTests(TestWebApplicationFactory<Startup> factory)
         {
-            this.factory = factory;
+            this.client = factory.CreateClient();
         }
 
         [Fact]
         public async Task Authenticate_User_Successfully()
         {
-            var client = factory.CreateClient();
-
             var response = await client.PostAsJsonAsync("api/users/login", new UserLogin
             {
                 Username = "JohnSmith",
@@ -38,13 +36,11 @@ namespace NoteTaker.IntegrationTests
         [Fact]
         public async Task Create_User_Successfully()
         {
-            var client = factory.CreateClient();
-
             var response = await client.PostAsJsonAsync("api/users", new CreateUser
             {
-                Username = "JohnSmith",
+                Username = "JohnAdams",
                 FirstName = "John",
-                LastName = "Smith",
+                LastName = "Adams",
                 Password = "Apples"
             });
 

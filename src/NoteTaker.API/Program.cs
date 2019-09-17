@@ -14,8 +14,6 @@ namespace NoteTaker.API
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                var context = services.GetRequiredService<NoteTakerContext>();
-
                 TestDbInitialiser.Initialise(services);
             }
 

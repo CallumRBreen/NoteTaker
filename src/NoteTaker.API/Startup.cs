@@ -1,10 +1,13 @@
-﻿using FluentValidation.AspNetCore;
+﻿using System.Text;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NoteTaker.Core.Extensions;
 using NoteTaker.Core.Models;
@@ -39,7 +42,7 @@ namespace NoteTaker.API
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>())
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.Configure<Security>(Configuration.GetSection("Security"));
+            ConfigureSecurity(services);
 
             services.AddCoreServices();
 
@@ -48,7 +51,6 @@ namespace NoteTaker.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NoteTaker API", Version = "v1" });
             });
         }
-
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -59,6 +61,8 @@ namespace NoteTaker.API
             {
                 app.UseHsts();
             }
+
+            app.UseAuthentication();
 
             app.UseCors("MyPolicy");
 
@@ -72,6 +76,31 @@ namespace NoteTaker.API
 
             app.UseHttpsRedirection();
             app.UseMvc();
+        }
+
+        private void ConfigureSecurity(IServiceCollection services)
+        {
+            var securityConfiguration = Configuration.GetSection("Security");
+            services.Configure<Security>(securityConfiguration);
+
+            var security = securityConfiguration.Get<Security>();
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(security.JwtSecret)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
         }
     }
 }
