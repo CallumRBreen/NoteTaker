@@ -22,7 +22,6 @@ namespace NoteTaker.IntegrationTests
 
         public NotesControllerTests(TestWebApplicationFactory<Startup> factory)
         {
-            
             this.client = factory.CreateClient().AddTestJwtHeader();
         }
 

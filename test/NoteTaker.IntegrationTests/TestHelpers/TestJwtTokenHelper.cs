@@ -10,10 +10,11 @@ namespace NoteTaker.IntegrationTests.TestHelpers
     public static class TestJwtTokenHelper
     {
         public const string JwtSecret = "91321414-7748-4609-8032-C9E391F86776";
+        public const string UserId = "E4D966E7-D1B6-44C4-A78C-CC34ADA8C8E8";
 
         public static HttpClient AddTestJwtHeader(this HttpClient httpClient)
         {
-            var token = GetToken(Guid.NewGuid().ToString(), "TestUser");
+            var token = GetToken(UserId, "TestUser");
 
             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 

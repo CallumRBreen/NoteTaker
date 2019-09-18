@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using Moq;
 using NoteTaker.Core.Services.Implementations;
 using NoteTaker.Core.Tests.Helpers;
 using NoteTaker.DAL;
@@ -13,6 +16,18 @@ namespace NoteTaker.Core.Tests.Services
 {
     public class NotesServiceTests
     {
+        private readonly Mock<IHttpContextAccessor> httpContextAccessor;
+        private readonly User user;
+
+        public NotesServiceTests()
+        {
+            httpContextAccessor = new Mock<IHttpContextAccessor>();
+
+            user = new User(Guid.NewGuid());
+
+            httpContextAccessor.Setup(x => x.HttpContext.User).Returns(new TestPrincipal(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()))).Verifiable();
+        }
+
         [Fact]
         public async Task Get_Note_Successfully()
         {
@@ -20,21 +35,22 @@ namespace NoteTaker.Core.Tests.Services
 
             var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Get_Note_Successfully));
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
                 context.Add(new Note
                 {
                     Id = noteId,
                     Title = "Apples",
-                    Content = "Oranges"
+                    Content = "Oranges",
+                    User = user
                 });
 
                 context.SaveChanges();
             };
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
-                var service = new NotesService(context);
+                var service = new NotesService(context, httpContextAccessor.Object);
 
                 var note = await service.GetNoteAsync(noteId.ToString());
 
@@ -48,13 +64,15 @@ namespace NoteTaker.Core.Tests.Services
         {
             var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Create_Note_Successfully));
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
-                var service = new NotesService(context);
+                var service = new NotesService(context, httpContextAccessor.Object);
 
                 var note = await service.CreateNoteAsync("Apples", "Oranges");
 
                 note.Should().NotBeNull();
+
+                httpContextAccessor.Verify(x => x.HttpContext.User, Times.Once);
             };
         }
 
@@ -65,21 +83,22 @@ namespace NoteTaker.Core.Tests.Services
 
             var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Update_Note_Successfully));
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
                 context.Add(new Note
                 {
                     Id = noteId,
                     Title = "Apples",
-                    Content = "Oranges"
+                    Content = "Oranges",
+                    User = user
                 });
 
                 context.SaveChanges();
             };
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
-                var service = new NotesService(context);
+                var service = new NotesService(context, httpContextAccessor.Object);
 
                 var updatedNote = await service.UpdateNoteAsync(noteId.ToString(), "New Title", "New Content");
 
@@ -94,7 +113,7 @@ namespace NoteTaker.Core.Tests.Services
         {
             var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Search_Notes_Successfully));
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
                 context.Notes.AddRange(new List<Note>
                 {
@@ -104,7 +123,8 @@ namespace NoteTaker.Core.Tests.Services
                         Title = "Apples",
                         Content = "Oranges",
                         Created = DateTime.Now,
-                        Modified = DateTime.Now.AddDays(-7)
+                        Modified = DateTime.Now.AddDays(-7),
+                        User = user
                     },
                     new Note
                     {
@@ -112,7 +132,8 @@ namespace NoteTaker.Core.Tests.Services
                         Title = "Pineapples",
                         Content = "Bananas",
                         Created = DateTime.Now,
-                        Modified = DateTime.Now.AddDays(-3)
+                        Modified = DateTime.Now.AddDays(-3),
+                        User = user
                     },
                     new Note
                     {
@@ -120,16 +141,17 @@ namespace NoteTaker.Core.Tests.Services
                         Title = "Avocado",
                         Content = "Broccoli",
                         Created = DateTime.Now,
-                        Modified = DateTime.Now.AddDays(-10)
+                        Modified = DateTime.Now.AddDays(-10),
+                        User = user
                     },
                 });
 
                 context.SaveChanges();
             };
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
-                var service = new NotesService(context);
+                var service = new NotesService(context, httpContextAccessor.Object);
 
                 var notes = await service.GetNotesAsync("Avocado");
 
@@ -143,7 +165,7 @@ namespace NoteTaker.Core.Tests.Services
         {
             var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Get_Notes_OrderedByModifiedDesc_Successfully));
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
                 context.Notes.AddRange(new List<Note>
                 {
@@ -153,7 +175,8 @@ namespace NoteTaker.Core.Tests.Services
                         Title = "Apples",
                         Content = "Oranges",
                         Created = DateTime.Now,
-                        Modified = DateTime.Now.AddDays(-7)
+                        Modified = DateTime.Now.AddDays(-7),
+                        User = user
                     },
                     new Note
                     {
@@ -161,7 +184,8 @@ namespace NoteTaker.Core.Tests.Services
                         Title = "Pineapples",
                         Content = "Bananas",
                         Created = DateTime.Now,
-                        Modified = DateTime.Now.AddDays(-3)
+                        Modified = DateTime.Now.AddDays(-3),
+                        User = user
                     },
                     new Note
                     {
@@ -169,16 +193,17 @@ namespace NoteTaker.Core.Tests.Services
                         Title = "Avocado",
                         Content = "Broccoli",
                         Created = DateTime.Now,
-                        Modified = DateTime.Now.AddDays(-10)
+                        Modified = DateTime.Now.AddDays(-10),
+                        User = user
                     },
                 });
 
                 context.SaveChanges();
             };
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
-                var service = new NotesService(context);
+                var service = new NotesService(context, httpContextAccessor.Object);
 
                 var notes = await service.GetNotesAsync(string.Empty);
 

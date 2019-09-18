@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NoteTaker.Core.Models;
@@ -18,12 +19,14 @@ namespace NoteTaker.Core.Tests.Services
         private readonly Mock<IPasswordHashingService> passwordHashingService;
         private readonly Mock<ITokenService> tokenService;
         private readonly NullLogger<UsersService> logger;
+        private readonly Mock<IHttpContextAccessor> httpContextAccessor;
 
         public UsersServiceTests()
         {
             passwordHashingService = new Mock<IPasswordHashingService>();
             tokenService = new Mock<ITokenService>();
             logger = new NullLogger<UsersService>();
+            httpContextAccessor = new Mock<IHttpContextAccessor>();
         }
 
         [Fact]
@@ -34,13 +37,13 @@ namespace NoteTaker.Core.Tests.Services
             var password = "Apples";
             var passwordHash = Guid.NewGuid().ToString();
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
                 context.Users.Add(new User("JohnSmith", "John", "Smith", passwordHash));
                 context.SaveChanges();
             }
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
                 passwordHashingService.Setup(x => x.VerifyPassword(It.Is<string>(y => y.Equals(password)),
                             It.Is<string>(y => y.Equals(passwordHash)))).Returns(true).Verifiable();
@@ -64,13 +67,13 @@ namespace NoteTaker.Core.Tests.Services
         {
             var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Return_Null_After_Failed_Authentication));
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
                 context.Users.Add(new User("JohnSmith", "John", "Smith", Guid.NewGuid().ToString()));
                 context.SaveChanges();
             }
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
                 passwordHashingService.Setup(x => x.VerifyPassword(It.IsAny<string>(),It.IsAny<string>())).Returns(false).Verifiable();
 
@@ -89,7 +92,7 @@ namespace NoteTaker.Core.Tests.Services
         {
             var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Create_User_Successfully));
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
                 var createUser = new CreateUser()
                 {
@@ -116,7 +119,7 @@ namespace NoteTaker.Core.Tests.Services
         {
             var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Ensure_Unique_Username));
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
                 var user = new User
                 {
@@ -134,7 +137,7 @@ namespace NoteTaker.Core.Tests.Services
                 context.SaveChanges();
             }
 
-            using (var context = new NoteTakerContext(options))
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
                 var createUser = new CreateUser()
                 {

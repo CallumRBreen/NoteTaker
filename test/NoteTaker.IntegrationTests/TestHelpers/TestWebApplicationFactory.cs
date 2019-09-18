@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using Bogus;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using NoteTaker.Core.Models;
 using NoteTaker.DAL;
 using Note = NoteTaker.DAL.Entities.Note;
 using User = NoteTaker.DAL.Entities.User;
@@ -34,6 +29,8 @@ namespace NoteTaker.IntegrationTests.TestHelpers
                     options.UseInMemoryDatabase("NoteTakerInMemoryForIntegrationTests");
                     options.UseInternalServiceProvider(serviceProvider);
                 });
+
+                services.AddHttpContextAccessor();
 
                 var sp = services.BuildServiceProvider();
 
@@ -68,7 +65,11 @@ namespace NoteTaker.IntegrationTests.TestHelpers
 
         private static void InitialiseNotesControllerTestData(NoteTakerContext context)
         {
-            var notes = GetNotes(50).ToList();
+            var user = new User(new Guid(TestJwtTokenHelper.UserId));
+
+            context.Users.Add(user);
+
+            var notes = GetNotes(50, user).ToList();
 
             notes[0].Title = "Apples";
             notes[1].Id = new Guid("11111111-1234-4133-8c69-40ca0509be6a");
@@ -90,13 +91,13 @@ namespace NoteTaker.IntegrationTests.TestHelpers
             context.SaveChanges();
         }
 
-        private static IEnumerable<Note> GetNotes(int count)
+        private static IEnumerable<Note> GetNotes(int count, User user)
         {
             var faker = new Faker();
 
             for (int i = 0; i < count; i++)
             {
-                yield return new Note(faker.Lorem.Lines(1), faker.Lorem.Paragraphs(2));
+                yield return new Note(faker.Lorem.Lines(1), faker.Lorem.Paragraphs(2), user.Id);
             }
         }
     }

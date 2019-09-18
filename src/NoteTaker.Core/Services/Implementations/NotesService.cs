@@ -2,20 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using NoteTaker.Core.Models;
 using NoteTaker.Core.Services.Interfaces;
 using NoteTaker.DAL;
+using NoteTaker.DAL.Extensions;
+using Note = NoteTaker.Core.Models.Note;
 
 namespace NoteTaker.Core.Services.Implementations
 {
     public class NotesService : INotesService
     {
         private readonly NoteTakerContext context;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public NotesService(NoteTakerContext context)
+        public NotesService(NoteTakerContext context, IHttpContextAccessor httpContextAccessor)
         {
             this.context = context;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Note> GetNoteAsync(string id)
@@ -29,7 +33,7 @@ namespace NoteTaker.Core.Services.Implementations
 
         public async Task<Note> CreateNoteAsync(string title, string name)
         {
-            var note = new DAL.Entities.Note(title, name);
+            var note = new DAL.Entities.Note(title, name, httpContextAccessor.GetCurrentUserId());
 
             context.Notes.Add(note);
 
