@@ -1,7 +1,8 @@
+import { LoginComponent } from './login/login.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { NotesComponent } from './notes/notes.component';
-import { NoteComponent } from './notes/note/note.component';
+import { SignupComponent } from './signup/signup.component';
 
 const routes: Routes = [
   {
@@ -9,6 +10,12 @@ const routes: Routes = [
   },
   {
     path: 'notes', component: NotesComponent
+  },
+  {
+    path: 'login', component: LoginComponent
+  },
+  {
+    path: 'signup', component: SignupComponent
   }
 ];
 

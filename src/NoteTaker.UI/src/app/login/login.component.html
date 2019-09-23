@@ -1,0 +1,47 @@
+<div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 10%">
+  <mat-card>
+    <mat-card-title>Login</mat-card-title>
+    <mat-card-content>
+
+      <div *ngIf="form.get('username').invalid && !isSubmittedFormValid" class="error">
+        <div *ngIf="form.get('username').errors.required">
+          Username is required.
+        </div>
+      </div>
+
+      <div *ngIf="form.get('password').invalid && !isSubmittedFormValid" class="error">
+        <div *ngIf="form.get('password').errors.required">
+          Password is required.
+        </div>
+        <div *ngIf="form.get('password').errors.minlength">
+          Password must be at least 6 characters long.
+        </div>
+        <div *ngIf="form.get('password').errors.maxlength">
+          Password must have a maximum of 60 characters.
+        </div>
+      </div>
+
+      <div *ngIf="isLoginError" class="error">
+        Username or Password invalid.
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <p>
+          <mat-form-field>
+            <input matInput placeholder="Username" formControlName="username">
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field>
+            <input type="password" matInput placeholder="Password" formControlName="password">
+          </mat-form-field>
+        </p>
+
+        <div>
+          <button style="float:right" mat-flat-button color="primary">Login</button>
+          <button style="float:left" routerLink="/signup" mat-stroked-button>Sign Up</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

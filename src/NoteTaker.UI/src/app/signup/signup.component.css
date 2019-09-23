@@ -1,0 +1,13 @@
+.mat-form-field {
+    width: 100%;
+    min-width: 300px;
+}
+
+mat-card-title {
+    display:flex;
+    justify-content: center;
+}
+
+.error {
+    color:red;
+}

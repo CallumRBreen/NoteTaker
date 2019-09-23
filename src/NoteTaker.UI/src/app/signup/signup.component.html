@@ -1,0 +1,70 @@
+<div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 10%">
+  <mat-card>
+    <mat-card-title>Sign Up</mat-card-title>
+    <mat-card-content>
+
+      <div *ngIf="form.get('username').invalid && !isSubmittedFormValid" class="error">
+        <div *ngIf="form.get('username').errors.required">
+          Username is required.
+        </div>
+      </div>
+
+      <div *ngIf="form.get('firstName').invalid && !isSubmittedFormValid" class="error">
+        <div *ngIf="form.get('firstName').errors.required">
+          First Name is required.
+        </div>
+      </div>
+
+      <div *ngIf="form.get('lastName').invalid && !isSubmittedFormValid" class="error">
+        <div *ngIf="form.get('lastName').errors.required">
+          Last Name is required.
+        </div>
+      </div>
+
+      <div *ngIf="form.get('password').invalid && !isSubmittedFormValid" class="error">
+        <div *ngIf="form.get('password').errors.required">
+          Password is required.
+        </div>
+        <div *ngIf="form.get('password').errors.minlength">
+          Password must be at least 6 characters long.
+        </div>
+        <div *ngIf="form.get('password').errors.maxlength">
+          Password must have a maximum of 60 characters.
+        </div>
+      </div>
+
+      <div *ngIf="isSignupError" class="error">
+        Username is unavailable.
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <p>
+          <mat-form-field>
+            <input matInput placeholder="Username" formControlName="username">
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field>
+            <input matInput placeholder="First Name" formControlName="firstName">
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field>
+            <input matInput placeholder="Last Name" formControlName="lastName">
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field>
+            <input type="password" matInput placeholder="Password" formControlName="password">
+          </mat-form-field>
+        </p>
+
+
+
+        <div>
+          <button style="float:right" mat-flat-button color="primary">Sign Up</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
