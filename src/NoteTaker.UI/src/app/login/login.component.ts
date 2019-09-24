@@ -21,7 +21,6 @@ export class LoginComponent implements OnInit {
   constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit() {
-    this.userService.logout();
   }
 
   submit() {
@@ -36,7 +35,7 @@ export class LoginComponent implements OnInit {
         },
         error => {
           this.isLoginError = true;
-        })
+        });
     }
     else {
       this.isSubmittedFormValid = false;

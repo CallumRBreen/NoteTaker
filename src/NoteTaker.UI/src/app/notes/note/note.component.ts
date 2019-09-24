@@ -10,7 +10,7 @@ import { map, filter, debounceTime, groupBy, mergeAll } from 'rxjs/operators';
 @Component({
   selector: 'app-note',
   templateUrl: './note.component.html',
-  styleUrls: ['./note.component.styl']
+  styleUrls: ['./note.component.css']
 })
 export class NoteComponent implements OnInit {
   public TitleEditor: BalloonEditor = BalloonEditor;
@@ -42,13 +42,11 @@ export class NoteComponent implements OnInit {
 
 
     this.titleChangeSubscription = this.hasTitleChanged.pipe(filter(x => x.changed === true), groupBy(x => x.id), map(group => group.pipe(debounceTime(2000))), mergeAll()).subscribe(x => {
-      console.log(x);
       this.notesService.updateTitle(x.id, x.data).subscribe(x => { console.log("Note title updated") });
       this.hasTitleChanged.next({ id: this.note.id, changed: false, data: null });
     })
 
     this.contentChangeSubscription = this.hasContentChanged.pipe(filter(x => x.changed === true), groupBy(x => x.id), map(group => group.pipe(debounceTime(2000))), mergeAll()).subscribe(x => {
-      console.log(x);
       this.notesService.updateContent(x.id, x.data).subscribe(x => { console.log("Note content updated") });
       this.hasContentChanged.next({ id: this.note.id, changed: false, data: null });
     })

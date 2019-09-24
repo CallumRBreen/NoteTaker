@@ -1,8 +1,5 @@
-$note-action-height = 40px;
-$header = 64px;
-
 .note-actions{
-  height: note-action-height;
+  height: 40px;
   font-size: 16px;
   vertical-align: middle; 
   padding-left: 20px;
@@ -32,13 +29,12 @@ $header = 64px;
   line-height: 1.75;
 }
 
-
 mat-list-item:hover {
   background-color:aliceblue; 
 }
 
 cdk-virtual-scroll-viewport{
-  height: calc(100vh - 64px - 40px); /* 64 is header height */
+  height: calc(100vh - 106px); /* 64 is header height */
 }
 
 ::-webkit-scrollbar {

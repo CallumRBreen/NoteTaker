@@ -1,6 +1,6 @@
 import { SignUpUser } from './../models/signUpUser';
 import { LoginUser } from './../models/loginUser';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
@@ -13,15 +13,19 @@ import { map } from 'rxjs/operators';
 export class UserService {
     url: string = environment.apiUrl + 'users/';
 
+    private isUserLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
     constructor(private http: HttpClient) { }
 
     login(loginUser: LoginUser): Observable<User> {
         return this.http.post<User>(`${this.url}login`, loginUser).pipe(map(user => {
             if (user && user.token) {
-                localStorage.setItem('currentUser', JSON.stringify(user))
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                this.isUserLoggedIn.next(true);
             }
             return user;
         }));
+
     }
 
     signUp(signUpUser: SignUpUser): Observable<User> {
@@ -30,5 +34,10 @@ export class UserService {
 
     logout() {
         localStorage.removeItem('currentUser');
+        this.isUserLoggedIn.next(false);
     };
+
+    get isLoggedin() {
+        return this.isUserLoggedIn.asObservable();
+    }
 }

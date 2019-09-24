@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { NoteService } from '../core/services/note.service';
 import { Note } from '../core/models/note';
 import { FormControl } from '@angular/forms';
-import { timer, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-notes',
   templateUrl: './notes.component.html',
-  styleUrls: ['./notes.component.styl']
+  styleUrls: ['./notes.component.css']
 })
 export class NotesComponent implements OnInit {
 

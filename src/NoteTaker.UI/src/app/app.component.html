@@ -1,14 +1,18 @@
 <mat-toolbar color="primary">
   <button mat-button routerLink="/notes">Note Taker</button>
   <span class="navigation-bar-space"></span>
-  <button mat-button routerLink="/login">Login</button>
-  <button mat-button routerLink="/signup">Sign Up</button>
+
+  <div *ngIf="isUserLoggedIn$ | async">
+    <button mat-button (click)="logout()">Sign Out</button>
+  </div>
+
+  <div *ngIf="!(isUserLoggedIn$ | async)">
+    <button mat-button routerLink="/login">Login</button>
+    <button mat-button routerLink="/signup">Sign Up</button>
+  </div>
+
 </mat-toolbar>
 
 <div class="container">
   <router-outlet></router-outlet>
 </div>
-
-<!-- <mat-toolbar color="primary" class="footer">
-  <div class="footer-info">&copy; 2019 Callum Breen</div>
-</mat-toolbar> -->
