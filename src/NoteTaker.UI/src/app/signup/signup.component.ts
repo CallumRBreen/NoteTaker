@@ -1,4 +1,4 @@
-import { AuthService } from './../core/services/auth.service';
+import { UserService } from './../core/services/user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -18,7 +18,7 @@ export class SignupComponent implements OnInit {
     password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(60)])
   });
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -26,7 +26,7 @@ export class SignupComponent implements OnInit {
   submit() {
     if (this.form.valid) {
       this.isSubmittedFormValid = true;
-      this.authService.signUp({
+      this.userService.signUp({
         username: this.form.controls['username'].value,
         firstName: this.form.controls['firstName'].value,
         lastName: this.form.controls['lastName'].value,

@@ -1,3 +1,7 @@
+.container{
+    margin-top: 10%;
+}
+
 .mat-form-field {
     width: 100%;
     min-width: 300px;
@@ -9,5 +13,15 @@ mat-card-title {
 }
 
 .error {
-    color:red;
+    color: #f44336;
+    background-color: #f2dede;
+    border: 1px solid #f44336;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.signup-button {
+    float: right;
 }

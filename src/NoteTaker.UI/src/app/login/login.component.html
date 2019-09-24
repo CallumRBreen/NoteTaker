@@ -1,11 +1,12 @@
-<div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 10%">
+<div fxLayout="row" fxLayoutAlign="center center" class="container">
   <mat-card>
     <mat-card-title>Login</mat-card-title>
     <mat-card-content>
 
       <div *ngIf="isLoginError" class="error">
-        Username or Password invalid.
+        Username or Password is invalid.
       </div>
+
       <form [formGroup]="form" (ngSubmit)="submit()">
         <p>
           <mat-form-field>
@@ -35,8 +36,8 @@
         </p>
 
         <div>
-          <button style="float:right" mat-flat-button color="primary">Login</button>
-          <button style="float:left" routerLink="/signup" mat-stroked-button>Sign Up</button>
+          <button class="login-button" mat-flat-button color="primary">Login</button>
+          <button class="signup-button" routerLink="/signup" mat-stroked-button>Sign Up</button>
         </div>
       </form>
     </mat-card-content>

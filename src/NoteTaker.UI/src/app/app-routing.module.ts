@@ -1,3 +1,4 @@
+import { AuthGuard } from './core/guards/auth.guard';
 import { LoginComponent } from './login/login.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -6,10 +7,10 @@ import { SignupComponent } from './signup/signup.component';
 
 const routes: Routes = [
   {
-    path: '', redirectTo: 'notes', pathMatch: 'full'
+    path: '', redirectTo: 'notes', pathMatch: 'full', canActivate: [AuthGuard]
   },
   {
-    path: 'notes', component: NotesComponent
+    path: 'notes', component: NotesComponent, canActivate: [AuthGuard]
   },
   {
     path: 'login', component: LoginComponent
