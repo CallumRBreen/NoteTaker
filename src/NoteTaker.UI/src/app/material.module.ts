@@ -23,7 +23,8 @@ import {
   MatTableModule,
   MatSortModule,
   MatPaginatorModule,
-  MatRippleModule
+  MatRippleModule,
+  MatSnackBarModule
 } from '@angular/material';
 
 @NgModule({
@@ -50,7 +51,8 @@ import {
     BrowserAnimationsModule,
     MatDividerModule,
     ScrollingModule,
-    MatRippleModule
+    MatRippleModule,
+    MatSnackBarModule
   ],
   exports: [
     MatButtonModule,
@@ -74,7 +76,8 @@ import {
     MatMenuModule,
     BrowserAnimationsModule,
     MatDividerModule,
-    ScrollingModule
+    ScrollingModule,
+    MatSnackBarModule
   ]
 })
 export class MaterialModule { }
