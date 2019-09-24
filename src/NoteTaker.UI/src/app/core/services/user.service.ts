@@ -13,9 +13,16 @@ import { map } from 'rxjs/operators';
 export class UserService {
     url: string = environment.apiUrl + 'users/';
 
-    private isUserLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private isUserLoggedIn: BehaviorSubject<boolean>;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        if (localStorage.getItem('currentUser')) {
+            this.isUserLoggedIn = new BehaviorSubject<boolean>(true);
+        }
+        else {
+            this.isUserLoggedIn = new BehaviorSubject<boolean>(false);
+        }
+    }
 
     login(loginUser: LoginUser): Observable<User> {
         return this.http.post<User>(`${this.url}login`, loginUser).pipe(map(user => {
