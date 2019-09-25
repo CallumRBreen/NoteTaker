@@ -11,6 +11,16 @@ steps:
       command: test
       projects: "**/*Tests/*.csproj"
       arguments: "--configuration Release"
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: publish
+      publishWebProjects: True
+      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
+      zipAfterPublish: True
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+      artifactName: 'notetakerapi'
   - task: Npm@1
     displayName: Frontend - Install Packages
     inputs:
