@@ -19,8 +19,6 @@ namespace NoteTaker.API
 
                 var dbContext = services.GetRequiredService<NoteTakerContext>();
                 await dbContext.Database.MigrateAsync();
-
-                DefaultDbInitialiser.Initialise(services);
             }
 
             host.Run();
