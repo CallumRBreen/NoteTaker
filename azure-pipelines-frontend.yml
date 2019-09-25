@@ -13,14 +13,10 @@ steps:
       workingDir: "src/NoteTaker.UI"
       verbose: false
       customCommand: "run build"
-  - task: CopyFiles@2
+  - task: PublishPipelineArtifact@0
     inputs:
-      contents: '_buildOutput/**'
-      targetFolder: $(Build.ArtifactStagingDirectory)
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-      artifactName: 'notetakerui'
+      artifactName: 'notetakerfrontend'
+      targetPath: 'src/NoteTaker.UI/dist'
 trigger:
   - master
 pool:
