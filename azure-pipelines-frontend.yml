@@ -1,0 +1,23 @@
+steps:
+  - task: Npm@1
+    displayName: Install Packages
+    inputs:
+      command: custom
+      workingDir: "src/NoteTaker.UI"
+      verbose: false
+      customCommand: "install --save"
+  - task: Npm@1
+    displayName: Build
+    inputs:
+      command: custom
+      workingDir: "src/NoteTaker.UI"
+      verbose: false
+      customCommand: "run build"
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+      artifactName: 'notetakerui'
+trigger:
+  - master
+pool:
+  vmImage: "ubuntu-latest"

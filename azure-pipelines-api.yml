@@ -1,12 +1,12 @@
 steps:
   - task: DotNetCoreCLI@2
-    displayName: "Backend - Build"
+    displayName: "Build"
     inputs:
       command: build
       projects: "**/*.csproj"
       arguments: "--configuration Release"
   - task: DotNetCoreCLI@2
-    displayName: "Backend - Tests"
+    displayName: "Test"
     inputs:
       command: test
       projects: "**/*Tests/*.csproj"
@@ -21,20 +21,6 @@ steps:
     inputs:
       pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
       artifactName: 'notetakerapi'
-  - task: Npm@1
-    displayName: Frontend - Install Packages
-    inputs:
-      command: custom
-      workingDir: "src/NoteTaker.UI"
-      verbose: false
-      customCommand: "install --save"
-  - task: Npm@1
-    displayName: Frontend - Build
-    inputs:
-      command: custom
-      workingDir: "src/NoteTaker.UI"
-      verbose: false
-      customCommand: "run build"
 trigger:
   - master
 pool:
