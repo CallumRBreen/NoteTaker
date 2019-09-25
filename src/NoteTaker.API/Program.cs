@@ -26,6 +26,7 @@ namespace NoteTaker.API
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseIISIntegration()
                 .CaptureStartupErrors(true) // the default
                 .UseSetting("detailedErrors", "true")
                 .UseStartup<Startup>();
