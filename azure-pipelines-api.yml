@@ -1,0 +1,27 @@
+steps:
+  - task: DotNetCoreCLI@2
+    displayName: "Build"
+    inputs:
+      command: build
+      projects: "**/*.csproj"
+      arguments: "--configuration Release"
+  - task: DotNetCoreCLI@2
+    displayName: "Test"
+    inputs:
+      command: test
+      projects: "**/*Tests/*.csproj"
+      arguments: "--configuration Release"
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: publish
+      publishWebProjects: True
+      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
+      zipAfterPublish: True
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+      artifactName: 'notetakerapi'
+trigger:
+  - master
+pool:
+  vmImage: "ubuntu-latest"

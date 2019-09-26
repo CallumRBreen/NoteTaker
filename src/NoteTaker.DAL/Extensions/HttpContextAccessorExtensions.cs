@@ -9,6 +9,11 @@ namespace NoteTaker.DAL.Extensions
     {
         public static Guid GetCurrentUserId(this IHttpContextAccessor httpContextAccessor)
         {
+            if (httpContextAccessor.HttpContext == null)
+            {
+                return default;
+            }
+
             var claim = httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(x => x.Type.Equals(ClaimTypes.NameIdentifier));
 
             if (claim == null)

@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  notetaker.api:
+    image: ${DOCKER_REGISTRY-}notetakerapi
+    build:
+      context: .
+      dockerfile: src/NoteTaker.API/Dockerfile

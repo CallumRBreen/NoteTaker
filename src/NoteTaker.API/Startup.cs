@@ -11,8 +11,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NoteTaker.Core.Extensions;
 using NoteTaker.Core.Models;
-using NoteTaker.Core.Services.Implementations;
-using NoteTaker.Core.Services.Interfaces;
 using NoteTaker.DAL;
 
 namespace NoteTaker.API
