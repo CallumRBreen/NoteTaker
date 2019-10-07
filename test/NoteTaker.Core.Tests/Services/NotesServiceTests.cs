@@ -153,7 +153,7 @@ namespace NoteTaker.Core.Tests.Services
             {
                 var service = new NotesService(context, httpContextAccessor.Object);
 
-                var notes = await service.GetNotesAsync("Avocado");
+                var notes = await service.GetNotesAsync("Avocado", null);
 
                 notes.Should().ContainSingle();
                 notes.First().Title.Should().BeEquivalentTo("Avocado");
@@ -161,9 +161,9 @@ namespace NoteTaker.Core.Tests.Services
         }
 
         [Fact]
-        public async Task Get_Notes_OrderedByModifiedDesc_Successfully()
+        public async Task Get_Notes_Default_Ordering_To_ModifiedDesc_Successfully()
         {
-            var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Get_Notes_OrderedByModifiedDesc_Successfully));
+            var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Get_Notes_Default_Ordering_To_ModifiedDesc_Successfully));
 
             using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
             {
@@ -205,7 +205,7 @@ namespace NoteTaker.Core.Tests.Services
             {
                 var service = new NotesService(context, httpContextAccessor.Object);
 
-                var notes = await service.GetNotesAsync(string.Empty);
+                var notes = await service.GetNotesAsync(string.Empty, null);
 
                 notes[0].Title.Should().BeEquivalentTo("Pineapples");
                 notes[1].Title.Should().BeEquivalentTo("Apples");

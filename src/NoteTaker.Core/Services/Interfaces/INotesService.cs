@@ -9,7 +9,7 @@ namespace NoteTaker.Core.Services.Interfaces
         Task<Note> GetNoteAsync(string id);
         Task<Note> CreateNoteAsync(string title, string content);
         Task<Note> UpdateNoteAsync(string id, string title, string content);
-        Task<List<Note>> GetNotesAsync(string searchText);
+        Task<List<Note>> GetNotesAsync(string searchText, string orderBy);
         Task DeleteNoteAsync(string id);
     }
 }

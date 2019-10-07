@@ -94,6 +94,78 @@ namespace NoteTaker.IntegrationTests
             response.EnsureSuccessStatusCode();
         }
 
+        [Fact]
+        public async Task Search_All_Notes_With_OrderBy_Title_Asc_Successfully()
+        {
+            var response = await client.GetAsync("api/notes?orderBy=TitleAtoZ");
+
+            response.EnsureSuccessStatusCode();
+
+            var responseModel = await response.Content.ReadAsAsync<List<Note>>();
+
+            responseModel.Select(x => x.Title).Should().BeInAscendingOrder();
+        }
+
+        [Fact]
+        public async Task Search_All_Notes_With_OrderBy_Title_Desc_Successfully()
+        {
+            var response = await client.GetAsync("api/notes?orderBy=TitleZtoA");
+
+            response.EnsureSuccessStatusCode();
+
+            var responseModel = await response.Content.ReadAsAsync<List<Note>>();
+
+            responseModel.Select(x => x.Title).Should().BeInDescendingOrder();
+        }
+
+        [Fact]
+        public async Task Search_All_Notes_With_OrderBy_Created_Asc_Successfully()
+        {
+            var response = await client.GetAsync("api/notes?orderBy=CreatedOldest");
+
+            response.EnsureSuccessStatusCode();
+
+            var responseModel = await response.Content.ReadAsAsync<List<Note>>();
+
+            responseModel.Select(x => x.Created).Should().BeInAscendingOrder();
+        }
+
+        [Fact]
+        public async Task Search_All_Notes_With_OrderBy_Created_Desc_Successfully()
+        {
+            var response = await client.GetAsync("api/notes?orderBy=CreatedNewest");
+
+            response.EnsureSuccessStatusCode();
+
+            var responseModel = await response.Content.ReadAsAsync<List<Note>>();
+
+            responseModel.Select(x => x.Created).Should().BeInDescendingOrder();
+        }
+
+        [Fact]
+        public async Task Search_All_Notes_With_OrderBy_Modified_Asc_Successfully()
+        {
+            var response = await client.GetAsync("api/notes?orderBy=ModifiedOldest");
+
+            response.EnsureSuccessStatusCode();
+
+            var responseModel = await response.Content.ReadAsAsync<List<Note>>();
+
+            responseModel.Select(x => x.Modified).Should().BeInAscendingOrder();
+        }
+
+        [Fact]
+        public async Task Search_All_Notes_With_OrderBy_Modified_Desc_Successfully()
+        {
+            var response = await client.GetAsync("api/notes?orderBy=ModifiedNewest");
+
+            response.EnsureSuccessStatusCode();
+
+            var responseModel = await response.Content.ReadAsAsync<List<Note>>();
+
+            responseModel.Select(x => x.Modified).Should().BeInDescendingOrder();
+        }
+
         private static JsonPatchDocument<Note> GetPatchNoteOperations()
         {
             var operations = new List<Operation<Note>>()

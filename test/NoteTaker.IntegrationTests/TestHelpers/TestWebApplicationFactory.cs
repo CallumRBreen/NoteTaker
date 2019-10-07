@@ -95,10 +95,15 @@ namespace NoteTaker.IntegrationTests.TestHelpers
         private static IEnumerable<Note> GetNotes(int count, User user)
         {
             var faker = new Faker();
+            var random = new Random();
 
             for (int i = 0; i < count; i++)
             {
-                yield return new Note(faker.Lorem.Lines(1), faker.Lorem.Paragraphs(2), user.Id);
+                yield return new Note(faker.Lorem.Lines(1), faker.Lorem.Paragraphs(2), user.Id)
+                {
+                    Modified = DateTime.Now.AddDays(-random.Next(1, 100)),
+                    Created = DateTime.Now.AddDays(-random.Next(1, 100)),
+                };
             }
         }
     }

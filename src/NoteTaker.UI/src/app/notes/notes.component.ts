@@ -19,6 +19,7 @@ export class NotesComponent implements OnInit {
   noteSearch: string;
   searchNotesControl = new FormControl('');
   searchNotesSubscription = new Subscription();
+  orderBy: string;
 
   constructor(private noteService: NoteService, public dialog: MatDialog) {
 
@@ -31,7 +32,7 @@ export class NotesComponent implements OnInit {
     });
 
     this.searchNotesSubscription = this.searchNotesControl.valueChanges.pipe(debounceTime(500)).subscribe(() => {
-      this.noteService.searchNotes(this.searchNotesControl.value).subscribe(notes => {
+      this.noteService.searchNotes(this.searchNotesControl.value, this.orderBy).subscribe(notes => {
         this.notes = notes;
         this.selectedNote = notes[0];
       })
@@ -55,6 +56,14 @@ export class NotesComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.searchNotesSubscription.unsubscribe();
+  }
+
+  getNotesOrdered(orderBy: string) {
+    this.orderBy = orderBy;
+    this.noteService.searchNotes(this.searchNotesControl.value, orderBy).subscribe(notes => {
+      this.notes = notes;
+      this.selectedNote = notes[0];
+    })
   }
 
   deleteNote(id: string, index: number) {

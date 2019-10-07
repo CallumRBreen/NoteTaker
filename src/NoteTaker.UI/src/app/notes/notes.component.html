@@ -1,8 +1,21 @@
 <div fxLayout="row">
   <div fxFlex="25%">
     <div fxLayout="row" fxLayoutAlign="space-evenly center">
-      <div fxFlex="90%">
+      <div fxFlex="80%">
         <input matInput placeholder="{{notes.length}} notes" class="note-search" [formControl]="searchNotesControl">
+      </div>
+      <div fxFlex="10%">
+        <button mat-icon-button [matMenuTriggerFor]="appMenu">
+          <mat-icon color="primary">sort</mat-icon>
+        </button>
+        <mat-menu #appMenu="matMenu">
+          <button mat-menu-item (click)="getNotesOrdered('CreatedNewest')">Created: Newest</button>
+          <button mat-menu-item (click)="getNotesOrdered('CreatedOldest')">Created: Oldest</button>
+          <button mat-menu-item (click)="getNotesOrdered('ModifiedNewest')">Modified: Newest</button>
+          <button mat-menu-item (click)="getNotesOrdered('ModifiedOldest')">Modified: Oldest</button>
+          <button mat-menu-item (click)="getNotesOrdered('TitleAtoZ')">Title: A to Z</button>
+          <button mat-menu-item (click)="getNotesOrdered('TitleZtoA')">Title: Z to A</button>
+        </mat-menu>
       </div>
       <div fxFlex="10%">
         <button mat-icon-button (click)="addNote()">
@@ -28,7 +41,7 @@
             {{ note.modified | timeAgo }}
           </div>
           <button *ngIf="note === selectedNote" mat-icon-button (click)="openDeletionDialog(note.id, i)">
-            <mat-icon>delete_outline</mat-icon>
+            <mat-icon color="primary">delete_outline</mat-icon>
           </button>
           <mat-divider></mat-divider>
         </mat-list-item>

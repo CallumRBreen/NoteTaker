@@ -36,7 +36,7 @@ namespace NoteTaker.API.Tests.Controllers
                 Text = "Apples"
             };
 
-            noteService.Setup(x => x.GetNotesAsync(It.Is<string>(y => y.Equals("Apples")))).ReturnsAsync(new List<Note>
+            noteService.Setup(x => x.GetNotesAsync(It.Is<string>(y => y.Equals("Apples")), It.IsAny<string>())).ReturnsAsync(new List<Note>
             {
                 new Note()
                 {

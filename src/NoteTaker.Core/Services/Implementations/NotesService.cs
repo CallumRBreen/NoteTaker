@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using NoteTaker.Core.Models;
 using NoteTaker.Core.Services.Interfaces;
 using NoteTaker.DAL;
 using NoteTaker.DAL.Extensions;
@@ -55,7 +56,7 @@ namespace NoteTaker.Core.Services.Implementations
             return new Note(note);
         }
 
-        public async Task<List<Note>> GetNotesAsync(string searchText)
+        public async Task<List<Note>> GetNotesAsync(string searchText, string orderBy)
         {
             var notes = context.Notes.AsQueryable();
 
@@ -65,7 +66,7 @@ namespace NoteTaker.Core.Services.Implementations
                                          || n.Content.Contains(searchText, StringComparison.InvariantCultureIgnoreCase));
             }
 
-            notes = notes.OrderByDescending(n => n.Modified);
+            notes = OrderNotes(notes, orderBy);
 
             return await notes.Select(n => new Note(n)).ToListAsync();
         }
@@ -79,6 +80,44 @@ namespace NoteTaker.Core.Services.Implementations
             context.Notes.Remove(noteToDelete);
 
             await context.SaveChangesAsync();
+        }
+
+        private IQueryable<DAL.Entities.Note> OrderNotes(IQueryable<DAL.Entities.Note> notes, string orderBy)
+        {
+            var orderedNotes = notes;
+
+            if (Enum.TryParse(orderBy, out NoteOrderBy noteOrderBy))
+            {
+                switch (noteOrderBy)
+                {
+                    case NoteOrderBy.CreatedNewest:
+                        orderedNotes = notes.OrderByDescending(x => x.Created);
+                        break;
+                    case NoteOrderBy.CreatedOldest:
+                        orderedNotes = notes.OrderBy(x => x.Created);
+                        break;
+                    case NoteOrderBy.ModifiedNewest:
+                        orderedNotes = notes.OrderByDescending(x => x.Modified);
+                        break;
+                    case NoteOrderBy.ModifiedOldest:
+                        orderedNotes = notes.OrderBy(x => x.Modified);
+                        break;
+                    case NoteOrderBy.TitleAtoZ:
+                        orderedNotes = notes.OrderBy(x => x.Title);
+                        break;
+                    case NoteOrderBy.TitleZtoA:
+                        orderedNotes = notes.OrderByDescending(x => x.Title);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            else
+            {
+                orderedNotes = notes.OrderByDescending(n => n.Modified);
+            }
+
+            return orderedNotes;
         }
     }
 }

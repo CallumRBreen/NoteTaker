@@ -16,8 +16,8 @@ export class NoteService {
     return this.http.get<Note[]>(this.url);
   }
 
-  searchNotes(text: string): Observable<Note[]> {
-    return this.http.get<Note[]>(`${this.url}?text=${text}`);
+  searchNotes(text: string, orderBy: string): Observable<Note[]> {
+    return this.http.get<Note[]>(`${this.url}?text=${text}&orderBy=${orderBy}`);
   }
 
   getNote(id: string): Observable<Note> {

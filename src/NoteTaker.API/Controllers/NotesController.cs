@@ -31,7 +31,7 @@ using NoteTaker.Core.Services.Interfaces;
         {
             logger.LogDebug("Retrieving notes");
 
-            var notes = await notesService.GetNotesAsync(query.Text);
+            var notes = await notesService.GetNotesAsync(query.Text, query.OrderBy);
 
             return Ok(notes.Select(n => new Note(n)).ToList());
         }
