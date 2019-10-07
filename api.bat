@@ -1,0 +1,1 @@
+dotnet run -p ./src/NoteTaker.API/NoteTaker.API.csproj -c Release
