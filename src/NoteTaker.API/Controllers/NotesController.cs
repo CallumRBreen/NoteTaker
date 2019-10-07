@@ -108,5 +108,17 @@ using NoteTaker.Core.Services.Interfaces;
 
             return Ok(new Note(patchedNote));
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(string id)
+        {
+            logger.LogDebug($"Deleting note: {id}");
+
+            await notesService.DeleteNoteAsync(id);
+
+            logger.LogDebug($"Deleted note: {id}");
+
+            return Ok();
+        }
     }
 }

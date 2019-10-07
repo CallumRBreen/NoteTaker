@@ -69,5 +69,16 @@ namespace NoteTaker.Core.Services.Implementations
 
             return await notes.Select(n => new Note(n)).ToListAsync();
         }
+
+        public async Task DeleteNoteAsync(string id)
+        {
+            var noteToDelete = await context.Notes.FirstOrDefaultAsync(n => n.Id.ToString() == id);
+
+            if (noteToDelete == null) return;
+
+            context.Notes.Remove(noteToDelete);
+
+            await context.SaveChangesAsync();
+        }
     }
 }

@@ -1,3 +1,5 @@
+import { DeleteNoteDialogComponent } from './delete-note-dialog/delete-note-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { NoteService } from '../core/services/note.service';
 import { Note } from '../core/models/note';
@@ -18,7 +20,7 @@ export class NotesComponent implements OnInit {
   searchNotesControl = new FormControl('');
   searchNotesSubscription = new Subscription();
 
-  constructor(private noteService: NoteService) {
+  constructor(private noteService: NoteService, public dialog: MatDialog) {
 
   }
 
@@ -40,8 +42,27 @@ export class NotesComponent implements OnInit {
     this.selectedNote = note;
   }
 
+  openDeletionDialog(id: string, index: number) {
+    const dialogRef = this.dialog.open(DeleteNoteDialogComponent, {
+      width: '350px',
+      data: id
+    });
+
+    dialogRef.afterClosed().subscribe(noteToDelete => {
+      this.deleteNote(noteToDelete, index);
+    });
+  }
+
   ngOnDestroy(): void {
     this.searchNotesSubscription.unsubscribe();
+  }
+
+  deleteNote(id: string, index: number) {
+    this.noteService.deleteNote(id).subscribe(() => {
+      this.notes.splice(index, 1);
+      this.notes = [...this.notes]
+      this.selectedNote = this.notes[0];
+    })
   }
 
   addNote() {

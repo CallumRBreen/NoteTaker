@@ -34,7 +34,7 @@ mat-list-item:hover {
 }
 
 cdk-virtual-scroll-viewport{
-  height: calc(100vh - 106px); /* 64 is header height */
+  height: calc(100vh - 106px);
 }
 
 ::-webkit-scrollbar {

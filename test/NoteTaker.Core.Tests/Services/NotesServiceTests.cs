@@ -212,5 +212,37 @@ namespace NoteTaker.Core.Tests.Services
                 notes[2].Title.Should().BeEquivalentTo("Avocado");
             };
         }
+
+        [Fact]
+        public async Task Delete_Note_Successfully()
+        {
+            var options = DbContextHelper.GetTestInMemoryDatabase(nameof(Delete_Note_Successfully));
+
+            var noteToDelete = Guid.NewGuid();
+
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
+            {
+                context.Notes.Add(new Note
+                {
+                        Id = noteToDelete,
+                        Title = "Apples",
+                        Content = "Oranges",
+                        Created = DateTime.Now,
+                        Modified = DateTime.Now.AddDays(-7),
+                        User = user
+                });
+
+                context.SaveChanges();
+            };
+
+            using (var context = new NoteTakerContext(options, httpContextAccessor.Object))
+            {
+                var service = new NotesService(context, httpContextAccessor.Object);
+
+                await service.DeleteNoteAsync(noteToDelete.ToString());
+
+                context.Notes.FirstOrDefault(x => x.Id == noteToDelete).Should().BeNull();
+            };
+        }
     }
 }

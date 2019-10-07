@@ -13,7 +13,7 @@
     <mat-divider></mat-divider>
     <cdk-virtual-scroll-viewport itemSize="100">
       <mat-list>
-        <mat-list-item *cdkVirtualFor="let note of notes;" [class.selected]="note === selectedNote"
+        <mat-list-item *cdkVirtualFor="let note of notes; let i = index" [class.selected]="note === selectedNote"
           (click)="onSelect(note)">
           <div *ngIf="note.title" matLine>
             <b>{{ note.title | htmlToPlaintext | limitTo: 30 }}</b>
@@ -27,7 +27,9 @@
           <div matLine>
             {{ note.modified | timeAgo }}
           </div>
-          <!-- <mat-icon>star_border</mat-icon> -->
+          <button *ngIf="note === selectedNote" mat-icon-button (click)="openDeletionDialog(note.id, i)">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
           <mat-divider></mat-divider>
         </mat-list-item>
       </mat-list>

@@ -1,0 +1,15 @@
+h1 {
+    text-align: center;
+}
+
+.ok-button {
+    float: right;
+}
+
+.cancel-button{
+    float: left;
+}
+
+div {
+    display: block;
+}

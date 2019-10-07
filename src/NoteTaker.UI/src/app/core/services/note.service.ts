@@ -28,6 +28,10 @@ export class NoteService {
     return this.http.post<Note>(this.url, note);
   }
 
+  deleteNote(id: string): Observable<any> {
+    return this.http.delete(`${this.url}${id}`)
+  }
+
   updateTitle(id: string, title: string): Observable<Note> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
     return this.http.patch<Note>(`${this.url}${id}`, `[{ "op": "replace", "path": "/title", "value": "${title}" }]`, { headers });

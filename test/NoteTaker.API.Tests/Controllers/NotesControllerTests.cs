@@ -211,6 +211,20 @@ namespace NoteTaker.API.Tests.Controllers
             noteService.Verify();
         }
 
+        [Fact]
+        public async Task Delete_Note_Returns_Ok()
+        {
+            var noteId = Guid.NewGuid().ToString();
+
+            noteService.Setup(x => x.DeleteNoteAsync(noteId)).Returns(Task.CompletedTask).Verifiable();
+
+            var result = await controller.Delete(noteId);
+
+            result.GetType().Should().Be(typeof(OkResult));
+
+            noteService.Verify();
+        }
+
         private static JsonPatchDocument<ViewModels.Note> GetPatchNoteOperations()
         {
             var operations = new List<Operation<ViewModels.Note>>()

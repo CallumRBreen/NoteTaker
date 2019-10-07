@@ -86,6 +86,14 @@ namespace NoteTaker.IntegrationTests
             responseModel.Content.Should().BeEquivalentTo("New Content");
         }
 
+        [Fact]
+        public async Task Delete_Note_Successfully()
+        {
+            var response = await client.DeleteAsync($"api/notes/44444444-1234-4133-8c69-40ca0509be6a");
+
+            response.EnsureSuccessStatusCode();
+        }
+
         private static JsonPatchDocument<Note> GetPatchNoteOperations()
         {
             var operations = new List<Operation<Note>>()
