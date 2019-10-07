@@ -22,7 +22,8 @@ namespace NoteTaker.DAL
 
                 if (!context.Notes.Any())
                 {
-                    var user = new User("CallumBreen", "Callum", "Breen", "$2b$10$HYrAy.9xP9f99i75tsdLXe9PYZ3/vu5nEwQNoKlQQEiBfXZFl.mf6");
+                    // password is apples
+                    var user = new User("CallumBreen", "Callum", "Breen", "$2b$10$m59R6F0ubBmQKMxksCizJ.zdToQ5wCLdwTM3S1HA5GyqjwhmC5fri");
 
                     context.Users.Add(user);
 

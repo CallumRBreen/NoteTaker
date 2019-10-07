@@ -18,8 +18,12 @@ namespace NoteTaker.API
                 var services = scope.ServiceProvider;
 
                 var dbContext = services.GetRequiredService<NoteTakerContext>();
-                await dbContext.Database.MigrateAsync();
 
+                if (dbContext.Database.IsSqlServer())
+                {
+                    await dbContext.Database.MigrateAsync();
+                }
+                
                 DefaultDbInitialiser.Initialise(services);
             }
 
